@@ -1,0 +1,3 @@
+<script>
+    {!! setting('javascript') !!}
+</script>

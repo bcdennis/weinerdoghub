@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: Smile
+        psr4_prefix: Smile
+        src_path: app

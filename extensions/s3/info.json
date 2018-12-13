@@ -1,0 +1,6 @@
+{
+  "name": "Amazon S3 - Storage",
+  "author": "Bitempest Team",
+  "description": "A module for uploading the media files to Amazon cloud S3 automatically.",
+  "version": "1.1.0"
+}

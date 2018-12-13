@@ -1,0 +1,10 @@
+/vendor
+/node_modules
+.env
+.idea
+composer.lock
+packages/
+extensions/meme/
+public/extensions/meme/
+studio.json
+.vagrant
