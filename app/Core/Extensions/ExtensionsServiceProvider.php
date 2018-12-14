@@ -1,6 +1,8 @@
 <?php
+
 namespace Smile\Core\Extensions;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class ExtensionsServiceProvider extends ServiceProvider
@@ -19,9 +21,9 @@ class ExtensionsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-    	if ( ! INSTALLED) {
-    		return;
-    	}
+        if (!INSTALLED) {
+            return;
+        }
 
         $this->app->singleton('extensions.hook', function ($app) {
             return new Hook();
@@ -50,16 +52,12 @@ class ExtensionsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-    	if ( ! INSTALLED) {
-    		return;
-    	}
+        if (!INSTALLED) {
+            return;
+        }
 
-        $bladeCompiler = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
-
-        $bladeCompiler->extend(function ($view, $compiler) {
-            $pattern = $compiler->createMatcher('widget');
-
-            return preg_replace($pattern, '<?php echo render_widget$2; ?>', $view);
+        Blade::directive('widget', function ($expression) {
+            return "<?php echo render_widget($expression) ?>";
         });
 
         $this->manager->boot();

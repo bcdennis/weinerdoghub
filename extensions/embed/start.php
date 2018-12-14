@@ -8,7 +8,8 @@ use Extensions\Embed\Vine;
 use Extensions\Embed\Youtube;
 use Smile\Core\Extensions\Extension;
 
-class EmbedExtension extends Extension {
+class EmbedExtension extends Extension
+{
 
     public function register()
     {

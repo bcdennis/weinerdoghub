@@ -1,9 +1,10 @@
 <?php namespace Smile\Handlers\Events\User;
 
-use Smile\Events\User\UserWasCreated;
 use Smile\Core\Persistence\Repositories\StatContract;
+use Smile\Events\User\UserWasCreated;
 
-class TrackUser {
+class TrackUser
+{
 
     /**
      * @var StatContract
@@ -23,7 +24,7 @@ class TrackUser {
     /**
      * Handle the event.
      *
-     * @param  UserWasCreated  $event
+     * @param  UserWasCreated $event
      * @return void
      */
     public function handle(UserWasCreated $event)

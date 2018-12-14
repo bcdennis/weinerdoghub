@@ -14,8 +14,10 @@
 
         <div class="form-group dropdown-checkboxes-wrapper categories">
             <div class="dropdown-checkboxes">
-                <span class="categories-selected">{{ __('Select a category') }} ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
-                <span class="categories-selected-text hide">{{ __('Select a category') }} ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
+                <span class="categories-selected">{{ __('Select a category') }}
+                    ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
+                <span class="categories-selected-text hide">{{ __('Select a category') }}
+                    ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
                 <span class="caret"></span>
             </div>
 
@@ -24,7 +26,8 @@
                     @if ( ! $category->template || $category->template == 'nsfw' || $category->template == 'meme')
                         <li>
                             <label>{{ $category->title }}
-                                <input type="checkbox" name="categories[{{ $category->slug }}]" value="{{ $category->slug }}">
+                                <input type="checkbox" name="categories[{{ $category->slug }}]"
+                                       value="{{ $category->slug }}">
                             </label>
                         </li>
                     @endif
@@ -50,7 +53,8 @@
 <div class="modal modal-upload modal-upload-file">
     <button class="modal-close"><span>x</span></button>
     <h2 class="modal-heading">{{ __('Upload') }}</h2>
-    <p class="modal-subheading">{{ __('formats accepted:') }} GIF, JPG, PNG ({{ __('max') }} {{ number_format(setting('image-size', 3072) / 1000, 0) }}mb)</p>
+    <p class="modal-subheading">{{ __('formats accepted:') }} GIF, JPG, PNG
+        ({{ __('max') }} {{ number_format(setting('image-size', 3072) / 1000, 0) }}mb)</p>
 
     <form action="{{ route('posts.store.file') }}" method="post" id="file-upload-form" enctype="multipart/form-data">
         <div class="form-group media">
@@ -63,8 +67,10 @@
         </div>
         <div class="form-group dropdown-checkboxes-wrapper categories">
             <div class="dropdown-checkboxes">
-                <span class="categories-selected">{{ __('Select a category') }} ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
-                <span class="categories-selected-text hide">{{ __('Select a category') }} ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
+                <span class="categories-selected">{{ __('Select a category') }}
+                    ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
+                <span class="categories-selected-text hide">{{ __('Select a category') }}
+                    ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
                 <span class="caret"></span>
             </div>
             <ul class="checkboxes-list" data-max-cat="{{ setting('maximum-categories', 2) }}">
@@ -72,7 +78,8 @@
                     @if ( ! $category->template || $category->template == 'nsfw' || $category->template == 'meme')
                         <li>
                             <label>{{ $category->title }}
-                                <input type="checkbox" name="categories[{{ $category->slug }}]" value="{{ $category->slug }}">
+                                <input type="checkbox" name="categories[{{ $category->slug }}]"
+                                       value="{{ $category->slug }}">
                             </label>
                         </li>
                     @endif

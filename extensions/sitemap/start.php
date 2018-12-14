@@ -3,7 +3,8 @@
 use Illuminate\Routing\Router;
 use Smile\Core\Extensions\Extension;
 
-class SitemapExtension extends Extension {
+class SitemapExtension extends Extension
+{
 
     public $settingsRoute = 'admin.extensions.sitemap.settings';
 

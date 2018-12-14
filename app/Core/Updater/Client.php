@@ -44,7 +44,8 @@ class Client
         }
 
         if (is_object($data)) {
-            $data = $data->json();
+            $content = $data->getBody()->getContents();
+            $data = json_decode($content);
         }
 
         if ($data === null) {
@@ -52,6 +53,29 @@ class Client
         }
 
         return true;
+    }
+
+    /**
+     * Make requests
+     *
+     * @param $url
+     * @param array $data
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function send($url, array $data = [])
+    {
+        return $this->client->post(self::URL . '/' . $url, [
+            'headers' => [
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'json' => array_merge([
+                'url' => url('/'),
+                'ip' => isset($_SERVER['LOCAL_ADDR']) ? $_SERVER['LOCAL_ADDR'] : $_SERVER['SERVER_ADDR'],
+                'product' => 'smile-v' . VERSION
+            ], $data)
+        ]);
     }
 
     /**
@@ -68,10 +92,12 @@ class Client
             $data = $this->send('version', ['license' => $key]);
 
             if (is_object($data)) {
-                $version = $data->json()['version'];
+                $content = $data->getBody()->getContents();
+                $json = json_decode($content, 1);
+                $version = isset($json['version']) ? $json['version'] : null;
             }
         } catch (\Exception $e) {
-
+            //
         }
 
         return $version;
@@ -98,27 +124,6 @@ class Client
         }
 
         return $status;
-    }
-
-    /**
-     * Make requests
-     *
-     * @param $url
-     * @param array $data
-     * @return \GuzzleHttp\Message\FutureResponse|\GuzzleHttp\Message\ResponseInterface|\GuzzleHttp\Ring\Future\FutureInterface|null
-     */
-    protected function send($url, array $data = [])
-    {
-        return $this->client->post(self::URL.'/'.$url, [
-            'headers' => [
-                'X-Requested-With' => 'XMLHttpRequest',
-            ],
-            'body' => array_merge([
-                'url' => url(),
-                'ip' => isset($_SERVER['LOCAL_ADDR']) ? $_SERVER['LOCAL_ADDR'] : $_SERVER['SERVER_ADDR'],
-                'product' => 'smile-v'.VERSION
-            ], $data)
-        ]);
     }
 
 }

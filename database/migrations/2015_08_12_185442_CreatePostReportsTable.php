@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostReportsTable extends Migration {
+class CreatePostReportsTable extends Migration
+{
 
     /**
      * Run the migrations.
@@ -22,7 +23,7 @@ class CreatePostReportsTable extends Migration {
             $table->timestamps();
 
             $table->foreign('post_id')->references('id')
-                    ->on('posts')->onDelete('cascade');
+                ->on('posts')->onDelete('cascade');
             $table->foreign('user_id')->references('id')
                 ->on('users')->onDelete('cascade');
         });

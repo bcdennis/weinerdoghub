@@ -23,7 +23,6 @@ class ThemeServiceProvider extends ServiceProvider
             $this->app['themes.manager']->activate('site');
         } else {
             $this->app['config']->set('app.debug', true);
-            $this->app['themes.manager']->activate('installer');
         }
     }
 
@@ -43,7 +42,7 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function registerResources(Theme $theme)
     {
-        $this->loadViewsFrom($theme->getPath().'/resources/views/', $theme->getName());
-        $this->loadTranslationsFrom($theme->getPath().'/resources/lang/', $theme->getName());
+        $this->loadViewsFrom($theme->getPath() . '/resources/views/', $theme->getName());
+        $this->loadTranslationsFrom($theme->getPath() . '/resources/lang/', $theme->getName());
     }
 }

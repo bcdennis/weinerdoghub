@@ -1,11 +1,12 @@
 <?php namespace Smile\Events\Comment;
 
-use Smile\Events\Event;
+use Illuminate\Queue\SerializesModels;
 use Smile\Core\Persistence\Models\Comment;
 use Smile\Core\Persistence\Models\User;
-use Illuminate\Queue\SerializesModels;
+use Smile\Events\Event;
 
-class CommentWasUnvoted extends Event {
+class CommentWasUnvoted extends Event
+{
 
     use SerializesModels;
 

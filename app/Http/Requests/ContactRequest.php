@@ -32,7 +32,7 @@ class ContactRequest extends Request
 
         hook('request.contact', $rules);
 
-        if ( ! setting('captcha.secret')) {
+        if (!setting('captcha.secret')) {
             unset($rules['g-recaptcha-response']);
         }
 

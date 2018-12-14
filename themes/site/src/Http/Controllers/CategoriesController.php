@@ -2,20 +2,13 @@
 
 namespace Themes\Site\Http\Controllers;
 
-use Illuminate\Auth\Guard;
 use Illuminate\Http\Request;
 use Smile\Core\Persistence\Repositories\CategoryContract;
 use Smile\Core\Persistence\Repositories\PostContract;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class CategoriesController extends BaseSiteController {
-
-    /**
-     * Current user
-     *
-     * @var \Illuminate\Contracts\Auth\Authenticatable|null
-     */
-    protected $currentUser;
+class CategoriesController extends BaseSiteController
+{
 
     /**
      * @var CategoryContract
@@ -29,13 +22,11 @@ class CategoriesController extends BaseSiteController {
     /**
      * @param CategoryContract $category
      * @param PostContract $post
-     * @param Guard $auth
      */
-    public function __construct(CategoryContract $category, PostContract $post, Guard $auth)
+    public function __construct(CategoryContract $category, PostContract $post)
     {
         $this->category = $category;
         $this->post = $post;
-        $this->currentUser = $auth->user();
     }
 
     /**
@@ -47,14 +38,14 @@ class CategoriesController extends BaseSiteController {
      */
     public function category(Request $request, $slug = null)
     {
-        $category = ! $slug ? $this->category->first() :
-                            $this->category->findBySlug($slug);
+        $category = !$slug ? $this->category->first() :
+            $this->category->findBySlug($slug);
 
-        if ( ! $category) {
+        if (!$category) {
             throw new NotFoundHttpException();
         }
 
-        $posts = $this->post->findByCategory($category, $this->currentUser, 10);
+        $posts = $this->post->findByCategory($category, $request->user(), 10);
 
         if ($request->has('ajax')) {
             return $this->jsonPagination($posts, $this->view('ajax.posts', compact('posts')));
@@ -71,7 +62,7 @@ class CategoriesController extends BaseSiteController {
      */
     public function weekly(Request $request)
     {
-        $posts = $this->post->topPosts('weekly', $this->currentUser);
+        $posts = $this->post->topPosts('weekly', $request->user());
 
         if ($request->has('ajax')) {
             return $this->jsonPagination($posts, $this->view('ajax.posts', compact('posts')));
@@ -88,7 +79,7 @@ class CategoriesController extends BaseSiteController {
      */
     public function monthly(Request $request)
     {
-        $posts = $this->post->topPosts('monthly', $this->currentUser);
+        $posts = $this->post->topPosts('monthly', $request->user());
 
         if ($request->has('ajax')) {
             return $this->jsonPagination($posts, $this->view('ajax.posts', compact('posts')));
@@ -105,7 +96,7 @@ class CategoriesController extends BaseSiteController {
      */
     public function yearly(Request $request)
     {
-        $posts = $this->post->topPosts('yearly', $this->currentUser);
+        $posts = $this->post->topPosts('yearly', $request->user());
 
         if ($request->has('ajax')) {
             return $this->jsonPagination($posts, $this->view('ajax.posts', compact('posts')));

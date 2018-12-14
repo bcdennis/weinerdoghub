@@ -2,8 +2,8 @@
 
 namespace Smile\Core\Persistence\Repositories\Eloquent;
 
-use Smile\Core\Persistence\Repositories\UserContract;
 use Smile\Core\Persistence\Models\User;
+use Smile\Core\Persistence\Repositories\UserContract;
 
 class UserRepository extends BaseRepository implements UserContract
 {
@@ -45,8 +45,8 @@ class UserRepository extends BaseRepository implements UserContract
     public function findByEmailAndToken($email, $token)
     {
         return $this->model->where('email', $email)
-                    ->where('confirmation_code', $token)
-                    ->first();
+            ->where('confirmation_code', $token)
+            ->first();
     }
 
     /**
@@ -71,9 +71,9 @@ class UserRepository extends BaseRepository implements UserContract
     {
         $query = $this->escape($query);
 
-        return $this->model->where('name', 'like', '%'.$query.'%')
-                           ->where('email', 'like', '%'.$query.'%')
-                           ->paginate($perPage);
+        return $this->model->where('name', 'like', '%' . $query . '%')
+            ->where('email', 'like', '%' . $query . '%')
+            ->paginate($perPage);
     }
 
     /**

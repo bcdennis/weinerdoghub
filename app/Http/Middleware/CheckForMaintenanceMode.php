@@ -3,11 +3,12 @@
 namespace Smile\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\Middleware;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class CheckForMaintenanceMode implements Middleware {
+class CheckForMaintenanceMode implements Middleware
+{
 
     /**
      * The application implementation.
@@ -19,7 +20,7 @@ class CheckForMaintenanceMode implements Middleware {
     /**
      * Create a new filter instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Foundation\Application $app
      */
     public function __construct(Application $app)
     {
@@ -29,14 +30,13 @@ class CheckForMaintenanceMode implements Middleware {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if ($this->app->isDownForMaintenance() && ! $request->is('admin*'))
-        {
+        if ($this->app->isDownForMaintenance() && !$request->is('admin*')) {
             throw new HttpException(503);
         }
 

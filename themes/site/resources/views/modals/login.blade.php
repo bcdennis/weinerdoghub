@@ -1,6 +1,7 @@
 <div class="modal modal-log-in">
     <button class="modal-close"><span>x</span></button>
-    <img src="{{ setting('logo') ? media(setting('logo')) : assetTheme('assets/img/logo.png') }}" class="modal-logo" alt="Smile Logo">
+    <img src="{{ setting('logo') ? media(setting('logo')) : assetTheme('assets/img/logo.png') }}" class="modal-logo"
+         alt="Smile Logo">
     <form action="{{ route('auth') }}" method="post" id="login-form">
         <span id="login-general-text" class="error-text error-hide">
         </span>

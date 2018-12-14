@@ -99,7 +99,7 @@
                         </table>
                     </div> <!-- end of table-responsive -->
                     <nav class="text-center">
-                        {!! paginator($reports->appends(Input::except(['page']))) !!}
+                        {!! $reports->appends(Request::except(['page']))->links() !!}
                     </nav>
                 </div> <!-- end of reports-list -->
             </div> <!-- end of ibox-content -->

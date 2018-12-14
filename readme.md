@@ -1,2 +1,2 @@
-## Smile Server
+## Smile Platform
 

@@ -15,7 +15,7 @@ interface CommentReportContract
      * @param int $perPage
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-	public function all($q = null, $perPage = 10);
+    public function all($q = null, $perPage = 10);
 
     /**
      * Count comment reports

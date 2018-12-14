@@ -2,33 +2,33 @@
 
 namespace Themes\Site\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Smile\Http\Controllers\Controller;
 
 abstract class BaseSiteController extends Controller
 {
-	/**
-	 * Execute an action on the controller.
-	 *
-	 * @param  string  $method
-	 * @param  array   $parameters
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	public function callAction($method, $parameters)
-	{
+    /**
+     * Execute an action on the controller.
+     *
+     * @param  string $method
+     * @param  array $parameters
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function callAction($method, $parameters)
+    {
         $user = auth()->user();
 
         $notification = app('Smile\Core\Persistence\Repositories\NotificationContract');
+        $notifications = $notification->search($user);
 
-        View::share('unread', $notification->countUnOpened($user));
-        View::share('notifications', $notification->search($user));
+        View::share('unread', $notifications->count());
+        View::share('notifications', $notifications);
         View::share('categories', app('Smile\Core\Persistence\Repositories\CategoryContract')->allActive());
         View::share('featured', app('Smile\Core\Services\PostService')->featured(10, $user));
 
 
-		return parent::callAction($method, $parameters);
-	}
+        return parent::callAction($method, $parameters);
+    }
 
     /**
      * Get view for selected theme

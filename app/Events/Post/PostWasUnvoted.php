@@ -1,11 +1,12 @@
 <?php namespace Smile\Events\Post;
 
-use Smile\Events\Event;
+use Illuminate\Queue\SerializesModels;
 use Smile\Core\Persistence\Models\Post;
 use Smile\Core\Persistence\Models\User;
-use Illuminate\Queue\SerializesModels;
+use Smile\Events\Event;
 
-class PostWasUnvoted extends Event {
+class PostWasUnvoted extends Event
+{
 
     use SerializesModels;
 

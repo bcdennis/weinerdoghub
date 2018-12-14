@@ -1,30 +1,18 @@
 <?php
+
 namespace Themes\Site\Http\Controllers;
 
-use IonutMilica\LaravelSettings\SettingsContract;
-use Illuminate\Auth\Guard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use IonutMilica\LaravelSettings\SettingsContract;
 use Smile\Core\Services\UserService;
 
 class AccountController extends BaseSiteController
 {
     /**
-     * Current logged in user
-     *
-     * @var \Illuminate\Contracts\Auth\Authenticatable
-     */
-    private $currentUser;
-
-    /**
      * @var UserService
      */
     private $userService;
-
-    /**
-     * @var Guard
-     */
-    private $auth;
 
     /**
      * @var SettingsContract
@@ -33,17 +21,14 @@ class AccountController extends BaseSiteController
 
     /**
      * @param UserService $userService
-     * @param Guard $auth
      * @param SettingsContract $settings
      */
-    public function __construct(UserService $userService, Guard $auth, SettingsContract $settings)
+    public function __construct(UserService $userService, SettingsContract $settings)
     {
         $this->middleware('auth');
 
-        $this->currentUser = $auth->user();
         $this->userService = $userService;
         $this->settings = $settings;
-        $this->auth = $auth;
     }
 
     /**
@@ -55,16 +40,16 @@ class AccountController extends BaseSiteController
     public function delete(Request $request)
     {
         $this->validate($request, [
-           'password' => 'required'
+            'password' => 'required'
         ]);
 
         if (perm('demo')) {
             return [];
         }
 
-        $success = $this->userService->delete($this->currentUser, $request->all());
+        $success = $this->userService->delete($request->user(), $request->all());
 
-        if ( ! $success) {
+        if (!$success) {
             return new JsonResponse(['password' => __('Invalid password for your current account!')], 401);
         }
 
@@ -74,12 +59,12 @@ class AccountController extends BaseSiteController
     /**
      * Display settings form
      *
-     * @param Guard $auth
+     * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function showSettings(Guard $auth)
+    public function showSettings(Request $request)
     {
-        $user = $auth->user();
+        $user = $request->user();
 
         return $this->view('account.settings', compact('user'));
     }
@@ -87,11 +72,12 @@ class AccountController extends BaseSiteController
     /**
      * Reset avatar to default
      *
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function resetAvatar()
+    public function resetAvatar(Request $request)
     {
-        $this->userService->resetAvatar($this->currentUser);
+        $this->userService->resetAvatar($request->user());
 
         return redirect()->back();
     }
@@ -100,10 +86,9 @@ class AccountController extends BaseSiteController
      * Store saved settings
      *
      * @param Request $request
-     * @param UserService $userService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function storeSettings(Request $request, UserService $userService)
+    public function storeSettings(Request $request)
     {
         $this->validate($request, $this->validationRulesForSettings($request));
 
@@ -113,7 +98,7 @@ class AccountController extends BaseSiteController
             unset($fields['password'], $fields['language'], $fields['name'], $fields['email']);
         }
 
-        $userService->updateProfile($this->currentUser, $fields);
+        $this->userService->updateProfile($request->user(), $fields);
 
         return redirect()->back();
     }
@@ -127,10 +112,10 @@ class AccountController extends BaseSiteController
     protected function validationRulesForSettings(Request $request)
     {
         $rules = [
-            'email' => 'required|email|unique:users,email,'.$this->currentUser->id,
-            'name'  => 'required|min:3|max:15|unique:users,name,'.$this->currentUser->id,
-            'avatar' => 'image|max:'.((int)setting('avatar-size', 3072)),
-            'language' => 'required|in:'.validateLangs(),
+            'email' => 'required|email|unique:users,email,' . $request->user()->id,
+            'name' => 'required|min:3|max:15|unique:users,name,' . $request->user()->id,
+            'avatar' => 'image|max:' . ((int)setting('avatar-size', 3072)),
+            'language' => 'required|in:' . validateLangs(),
             'nsfw' => 'required|boolean',
         ];
 

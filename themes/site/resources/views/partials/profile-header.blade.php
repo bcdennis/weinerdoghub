@@ -8,7 +8,8 @@
         </div>
 
         <div class="meta">
-            <span>{{ formatNumber($user->points) }} <span class="accent">{{ __choice('smiles', $user->points) }}</span> {{ __choice('generated', $user->points) }}</span>
+            <span>{{ formatNumber($user->points) }} <span
+                        class="accent">{{ __choice('smiles', $user->points) }}</span> {{ __choice('generated', $user->points) }}</span>
             <span>{{ __('member since') }}: {{ $user->created_at->format('M Y') }}</span>
         </div>
     </div> <!-- end of user-info -->
@@ -18,13 +19,16 @@
                 <a href="{{ route('profile.overview', $user->name) }}">{{ __('overview') }}</a>
             </li>
             <li {!! setProfileActive($user, 'profile.posts') !!}>
-                <a href="{{ route('profile.posts', $user->name) }}">{{ __('own posts') }} ({{ formatNumber($user->posts) }})</a>
+                <a href="{{ route('profile.posts', $user->name) }}">{{ __('own posts') }}
+                    ({{ formatNumber($user->posts) }})</a>
             </li>
             <li {!! setProfileActive($user, 'profile.smiles') !!}>
-                <a href="{{ route('profile.smiles', $user->name) }}">{{ __('smiles at') }} ({{ formatNumber($user->likes) }})</a>
+                <a href="{{ route('profile.smiles', $user->name) }}">{{ __('smiles at') }}
+                    ({{ formatNumber($user->likes) }})</a>
             </li>
             <li {!! setProfileActive($user, 'profile.comments') !!}>
-                <a href="{{ route('profile.comments', $user->name) }}">{{ __('commented on') }} ({{ formatNumber($user->comments) }})</a>
+                <a href="{{ route('profile.comments', $user->name) }}">{{ __('commented on') }}
+                    ({{ formatNumber($user->comments) }})</a>
             </li>
         </ul>
     </nav>

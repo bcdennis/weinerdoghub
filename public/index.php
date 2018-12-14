@@ -6,11 +6,13 @@
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
 
+define('LARAVEL_START', microtime(true));
+
 if (is_dir($dir = __DIR__.'/../smile/')) {
     define('SHARED_HOST', $dir);
 }
 
-define('VERSION', '1.5.4');
+define('VERSION', '1.6.0');
 define('SHARED_PATH', defined('SHARED_HOST') ? __DIR__.'/../smile' : __DIR__.'/..');
 define('INSTALLED', file_exists(SHARED_PATH.'/storage/app/.installed'));
 
@@ -22,11 +24,11 @@ define('INSTALLED', file_exists(SHARED_PATH.'/storage/app/.installed'));
 | Composer provides a convenient, automatically generated class loader for
 | our application. We just need to utilize it! We'll simply require it
 | into the script here so that we don't have to worry about manual
-| loading any of our classes later on. It feels nice to relax.
+| loading any of our classes later on. It feels great to relax.
 |
 */
 
-require SHARED_PATH.'/bootstrap/autoload.php';
+require SHARED_PATH.'/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +44,6 @@ require SHARED_PATH.'/bootstrap/autoload.php';
 
 $app = require_once SHARED_PATH.'/bootstrap/app.php';
 
-
 /*
 |--------------------------------------------------------------------------
 | Run The Application
@@ -55,7 +56,7 @@ $app = require_once SHARED_PATH.'/bootstrap/app.php';
 |
 */
 
-$kernel = $app->make('Illuminate\Contracts\Http\Kernel');
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(
     $request = Illuminate\Http\Request::capture()

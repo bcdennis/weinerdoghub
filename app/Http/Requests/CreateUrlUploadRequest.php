@@ -24,12 +24,12 @@ class CreateUrlUploadRequest extends Request
     {
         $rules = [
             'link' => 'required|url',
-            'title' => 'required|between:3,'.setting('post-size', 100),
-            'categories' => 'required|between:1,'.setting('maximum-categories', 2),
+            'title' => 'required|between:3,' . setting('post-size', 100),
+            'categories' => 'required|between:1,' . setting('maximum-categories', 2),
         ];
 
         foreach ($this->get('categories', []) as $category) {
-            $rules['categories.'.$category] = 'required|exists:categories,slug';
+            $rules['categories.' . $category] = 'required|exists:categories,slug';
         }
 
         hook('request.create-url-upload', $rules);

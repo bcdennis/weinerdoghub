@@ -1,10 +1,10 @@
 <?php namespace Smile\Handlers\Events\User;
 
+use Smile\Core\Persistence\Repositories\StatContract;
 use Smile\Events\User\UserCreatedThroughOAuth;
 
-use Smile\Core\Persistence\Repositories\StatContract;
-
-class TrackOAuthUser {
+class TrackOAuthUser
+{
 
     /**
      * @var StatContract

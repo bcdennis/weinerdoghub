@@ -1,35 +1,36 @@
 <?php namespace Smile\Events\Comment;
 
-use Smile\Events\Event;
+use Illuminate\Queue\SerializesModels;
 use Smile\Core\Persistence\Models\Comment;
 use Smile\Core\Persistence\Models\User;
-use Illuminate\Queue\SerializesModels;
+use Smile\Events\Event;
 
-class CommentWasVoted extends Event {
+class CommentWasVoted extends Event
+{
 
     use SerializesModels;
 
     /**
-    * @var User
-    */
+     * @var User
+     */
     public $user;
 
     /**
-    * @var Comment
-    */
+     * @var Comment
+     */
     public $comment;
 
     /**
-    * @var
-    */
+     * @var
+     */
     public $value;
 
     /**
-    * Create a new event instance.
-    * @param User $user
-    * @param Comment $comment
-    * @param $value
-    */
+     * Create a new event instance.
+     * @param User $user
+     * @param Comment $comment
+     * @param $value
+     */
     public function __construct(User $user, Comment $comment, $value)
     {
         $this->user = $user;

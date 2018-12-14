@@ -2,21 +2,11 @@
 
 namespace Themes\Site\Http\Controllers;
 
-use Illuminate\Auth\Guard;
 use Illuminate\Http\Request;
-use Smile\Core\Persistence\Repositories\CategoryContract;
 use Smile\Core\Persistence\Repositories\NotificationContract;
-use Smile\Core\Persistence\Repositories\PostContract;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class NotificationsController extends BaseSiteController {
-
-    /**
-     * Current user
-     *
-     * @var \Illuminate\Contracts\Auth\Authenticatable|null
-     */
-    protected $currentUser;
+class NotificationsController extends BaseSiteController
+{
 
     /**
      * @var NotificationContract
@@ -25,25 +15,25 @@ class NotificationsController extends BaseSiteController {
 
     /**
      * @param NotificationContract $notification
-     * @param Guard $auth
      */
-    public function __construct(NotificationContract $notification, Guard $auth)
+    public function __construct(NotificationContract $notification)
     {
-        $this->currentUser = $auth->user();
         $this->notification = $notification;
     }
 
     /**
-     * Mark notifications as readed
+     * Mark notifications as read
      *
      * @param Request $request
+     * @param $id
      * @return array
      */
-    public function read($id, Request $request)
+    public function read(Request $request, $id)
     {
+        $user = $request->user();
         $notification = $this->notification->findById($id);
 
-        if ($notification && $this->currentUser && $notification->user_id == $this->currentUser->id) {
+        if ($notification && $user && $notification->user_id == $user->id) {
             $this->notification->delete($notification);
             return redirect()->to($notification->url);
         }
@@ -54,11 +44,12 @@ class NotificationsController extends BaseSiteController {
     /**
      * Delete all the notifications
      *
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function deleteAll()
+    public function deleteAll(Request $request)
     {
-        $this->notification->deleteAll($this->currentUser);
+        $this->notification->deleteAll($request->user());
 
         return redirect()->back();
     }
@@ -71,7 +62,7 @@ class NotificationsController extends BaseSiteController {
      */
     public function all(Request $request)
     {
-        $notifications = $this->notification->search($this->currentUser, 10);
+        $notifications = $this->notification->search($request->user(), 10);
 
         if ($request->has('ajax')) {
             return $this->jsonPagination($notifications, $this->view('ajax.notifications', compact('notifications')));

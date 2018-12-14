@@ -1,297 +1,132 @@
 <?php
 
-get('/', [
-    'uses' => 'HomeController@dashboard',
-    'as'   => 'admin.dashboard',
-]);
 
-Route::group(['prefix' => 'auth'], function () {
-    get('login', [
-        'uses' => 'AuthController@showLogin',
-        'as' => 'admin.login',
-    ]);
-    post('login', 'AuthController@doLogin');
+use Illuminate\Routing\Router;
 
-    post('logout', [
-        'uses' => 'AuthController@doLogout',
-        'as'   => 'admin.logout',
-    ]);
-});
+Route::group([], function (Router $router) {
+    $router->get('/', 'HomeController@dashboard')
+        ->name('admin.dashboard');
 
-Route::group(['prefix' => 'reports'], function () {
-    get('posts', [
-        'uses' => 'ReportsController@posts',
-        'as'   => 'admin.reports.posts',
-    ]);
-    get('comments', [
-        'uses' => 'ReportsController@comments',
-        'as'   => 'admin.reports.comments',
-    ]);
-
-    delete('posts/{id}', [
-        'uses' => 'ReportsController@closePost',
-        'as'   => 'admin.reports.posts.close',
-    ]);
-
-    delete('comments/{id}', [
-        'uses' => 'ReportsController@closeComment',
-        'as'   => 'admin.reports.comments.close',
-    ]);
-
-});
-
-Route::group(['prefix' => 'license'], function () {
-    get('/', [
-        'uses' => 'LicenseController@form',
-        'as'   => 'admin.license',
-    ]);
-    post('/', 'LicenseController@store');
-});
-
-delete('comments/{id}', [
-    'uses' => 'CommentsController@delete',
-    'as'   => 'admin.comments.delete',
-]);
-
-Route::group(['prefix' => 'categories'], function () {
-    get('/', [
-        'uses' => 'CategoriesController@all',
-        'as' => 'admin.categories',
-    ]);
-
-    get('{id}/edit', [
-        'as' => 'admin.categories.edit',
-        'uses' => 'CategoriesController@edit',
-    ]);
-
-    post('{id}/edit', 'CategoriesController@doEdit');
-
-    post('/', [
-        'uses' => 'CategoriesController@store',
-        'as'  => 'admin.categories.store',
-    ]);
-
-    post('{id}/status', [
-        'uses' => 'CategoriesController@status',
-        'as' => 'admin.categories.status',
-    ]);
-
-    post('order', [
-        'uses' => 'CategoriesController@order',
-        'as'   => 'admin.categories.order'
-    ]);
-
-    delete('{id}', [
-        'uses' => 'CategoriesController@delete',
-        'as'   => 'admin.categories.delete',
-    ]);
-});
-
-Route::group(['prefix' => 'posts'], function () {
-    get('/', [
-        'uses' => 'PostsController@all',
-        'as'   => 'admin.posts',
-    ]);
-    get('hold', [
-        'uses' => 'PostsController@hold',
-        'as'   => 'admin.posts.hold',
-    ]);
-    post('{id}/pin', [
-        'uses' => 'PostsController@pin',
-        'as'   => 'admin.posts.pin',
-    ]);
-    delete('{id}', [
-        'uses' => 'PostsController@delete',
-        'as'   => 'admin.posts.delete',
-    ]);
-    post('{id}/accept', [
-        'uses' => 'PostsController@accept',
-        'as' => 'admin.posts.accept',
-    ]);
-});
-
-Route::group(['prefix' => 'users'], function () {
-    get('/', [
-        'uses' => 'UsersController@all',
-        'as'   => 'admin.users'
-    ]);
-
-    post('{id}', [
-        'uses' => 'UsersController@block',
-        'as'   => 'admin.users.block',
-    ]);
-
-    delete('{id}', [
-        'uses' => 'UsersController@delete',
-        'as'   => 'admin.users.delete',
-    ]);
-});
-
-
-Route::group(['prefix' => 'themes'], function () {
-    get('/', [
-        'uses' => 'ThemesController@all',
-        'as' => 'admin.themes',
-    ]);
-});
-
-Route::group(['prefix' => 'extensions'], function () {
-    get('/', [
-        'uses' => 'ExtensionsController@all',
-        'as' => 'admin.extensions',
-    ]);
-
-    post('{extension}/status', [
-        'uses' => 'ExtensionsController@status',
-        'as' => 'admin.extensions.status',
-    ]);
-
-    post('{extension}/install', [
-        'uses' => 'ExtensionsController@install',
-        'as' => 'admin.extensions.install',
-    ]);
-
-    post('{extension}/uninstall', [
-        'uses' => 'ExtensionsController@uninstall',
-        'as' => 'admin.extensions.uninstall',
-    ]);
-});
-
-Route::group(['namespace' => 'Settings', 'prefix' => 'settings'], function () {
-    Route::group(['prefix' => 'appearance'], function () {
-        get('/', [
-            'uses' => 'AppearanceController@form',
-            'as' => 'admin.settings.appearance',
-        ]);
-        post('branding', [
-            'uses' => 'AppearanceController@branding',
-            'as'   => 'admin.settings.appearance.branding',
-        ]);
-        post('logo', [
-            'uses' => 'AppearanceController@logo',
-            'as'   => 'admin.settings.appearance.logo',
-        ]);
-        post('favicon', [
-            'uses' => 'AppearanceController@favicon',
-            'as'   => 'admin.settings.appearance.favicon',
-        ]);
-        post('slug', [
-            'uses' => 'AppearanceController@slug',
-            'as'   => 'admin.settings.appearance.slug',
-        ]);
+    $router->group(['prefix' => '/auth'], function (Router $router) {
+        $router->get('/login', 'AuthController@showLogin')->name('admin.login');
+        $router->post('/login', 'AuthController@doLogin');
+        $router->post('/logout', 'AuthController@doLogout')->name('admin.logout');
     });
 
-    Route::group(['prefix' => 'conversions'], function () {
-        get('/', [
-            'uses' => 'ConversionsController@form',
-            'as' => 'admin.settings.conversion',
-        ]);
-        post('/', 'ConversionsController@status');
-        post('store', [
-            'uses' => 'ConversionsController@store',
-            'as' => 'admin.settings.conversion.store'
-        ]);
+    $router->group(['prefix' => '/reports'], function (Router $router) {
+        $router->get('/posts', 'ReportsController@posts')->name('admin.reports.posts');
+        $router->get('/comments', 'ReportsController@comments')->name('admin.reports.comments');
+        $router->delete('/posts/{id}', 'ReportsController@closePost')->name('admin.reports.posts.close');
+        $router->delete('/comments/{id}', 'ReportsController@closeComment')->name('admin.reports.comments.close');
     });
 
-    Route::group(['prefix' => 'restrictions'], function () {
-        get('/', [
-            'uses' => 'RestrictionsController@form',
-            'as' => 'admin.settings.restrictions',
-        ]);
-        post('/', 'RestrictionsController@store');
-        post('maintenance', [
-            'uses' => 'RestrictionsController@maintenance',
-            'as'   => 'admin.settings.restrictions.maintenance'
-        ]);
-        post('video', [
-            'uses' => 'RestrictionsController@video',
-            'as'   => 'admin.settings.restrictions.video'
-        ]);
-        post('register', [
-            'uses' => 'RestrictionsController@register',
-            'as'   => 'admin.settings.restrictions.register'
-        ]);
-        post('post-moderation', [
-            'uses' => 'RestrictionsController@postModeration',
-            'as'   => 'admin.settings.restrictions.post-moderation'
-        ]);
+    $router->group(['prefix' => '/license'], function (Router $router) {
+        $router->get('/', 'LicenseController@form')->name('admin.license');
+        $router->post('/', 'LicenseController@store');
     });
 
-    Route::group(['prefix' => 'social'], function () {
-        get('/', [
-            'uses' => 'SocialController@form',
-            'as' => 'admin.settings.social',
-        ]);
+    $router->delete('/comments/{id}', 'CommentsController@delete')->name('admin.comments.delete');
 
-        post('/', 'SocialController@status');
-
-        post('facebook', [
-            'uses' => 'SocialController@facebook',
-            'as' => 'admin.settings.social.facebook',
-        ]);
-        post('google', [
-            'uses' => 'SocialController@google',
-            'as' => 'admin.settings.social.google',
-        ]);
-        post('twitter', [
-            'uses' => 'SocialController@twitter',
-            'as' => 'admin.settings.social.twitter',
-        ]);
+    $router->group(['prefix' => '/categories'], function (Router $router) {
+        $router->get('/', 'CategoriesController@all')->name('admin.categories');
+        $router->get('/{id}/edit', 'CategoriesController@edit')->name('admin.categories.edit');
+        $router->post('/{id}/edit', 'CategoriesController@doEdit');
+        $router->post('/', 'CategoriesController@store')->name('admin.categories.store');
+        $router->post('/{id}/status', 'CategoriesController@status')->name('admin.categories.status');
+        $router->post('/order', 'CategoriesController@order')->name('admin.categories.order');
+        $router->delete('/{id}', 'CategoriesController@delete')->name('admin.categories.delete');
     });
 
-    Route::group(['prefix' => 'analytics'], function () {
-        get('/', [
-            'uses' => 'AnalyticsController@form',
-            'as' => 'admin.settings.analytics',
-        ]);
-        post('/', 'AnalyticsController@store');
+    $router->group(['prefix' => 'posts'], function (Router $router) {
+        $router->get('/', 'PostsController@all')->name('admin.posts');
+        $router->get('hold', 'PostsController@hold')->name('admin.posts.hold');
+        $router->post('{id}/pin', 'PostsController@pin')->name('admin.posts.pin');
+        $router->delete('{id}', 'PostsController@delete')->name('admin.posts.delete');
+        $router->post('{id}/accept', 'PostsController@accept')->name('admin.posts.accept');
     });
 
-    Route::group(['prefix' => 'captcha'], function () {
-        get('/', [
-            'uses' => 'CaptchaController@form',
-            'as' => 'admin.settings.captcha',
-        ]);
-        post('/', 'CaptchaController@store');
+    $router->group(['prefix' => 'users'], function (Router $router) {
+        $router->get('/', 'UsersController@all')->name('admin.users');
+
+        $router->post('{id}', 'UsersController@block')->name('admin.users.block');
+
+        $router->delete('{id}', 'UsersController@delete')->name('admin.users.delete');
     });
 
-    Route::group(['prefix' => 'email'], function () {
-        get('/', [
-            'uses' => 'EmailController@form',
-            'as' => 'admin.settings.email',
-        ]);
-        post('/', 'EmailController@store');
-        post('support', [
-            'uses' => 'EmailController@storeSupportEmail',
-            'as' => 'admin.settings.email.support',
-        ]);
+
+    $router->group(['prefix' => 'themes'], function (Router $router) {
+        $router->get('/', 'ThemesController@all')->name('admin.themes');
     });
 
-    Route::group(['prefix' => 'comments'], function () {
-        get('/', [
-            'uses' => 'CommentsController@form',
-            'as' => 'admin.settings.comments',
-        ]);
-        post('facebook', [
-            'uses' => 'CommentsController@facebook',
-            'as' => 'admin.settings.comments.facebook',
-        ]);
-        post('fb/id', [
-            'uses' => 'CommentsController@fbId',
-            'as' => 'admin.settings.comments.fb.id',
-        ]);
-        post('disqus/id', [
-            'uses' => 'CommentsController@disqusId',
-            'as' => 'admin.settings.comments.disqus.id',
-        ]);
-        post('disqus', [
-            'uses' => 'CommentsController@disqus',
-            'as' => 'admin.settings.comments.disqus',
-        ]);
-        post('local', [
-            'uses' => 'CommentsController@local',
-            'as' => 'admin.settings.comments.local',
-        ]);
+    $router->group(['prefix' => 'extensions'], function (Router $router) {
+        $router->get('/', 'ExtensionsController@all')->name('admin.extensions');
+
+        $router->post('{extension}/status', 'ExtensionsController@status')->name('admin.extensions.status');
+
+        $router->post('{extension}/install', 'ExtensionsController@install')->name('admin.extensions.install');
+
+        $router->post('{extension}/uninstall', 'ExtensionsController@uninstall')->name('admin.extensions.uninstall');
     });
 
+    $router->group(['namespace' => 'Settings', 'prefix' => 'settings'], function (Router $router) {
+        $router->group(['prefix' => 'appearance'], function (Router $router) {
+            $router->get('/', 'AppearanceController@form')->name('admin.settings.appearance');
+            $router->post('branding', 'AppearanceController@branding')->name('admin.settings.appearance.branding');
+            $router->post('logo', 'AppearanceController@logo')->name('admin.settings.appearance.logo');
+            $router->post('favicon', 'AppearanceController@favicon')->name('admin.settings.appearance.favicon');
+            $router->post('slug', 'AppearanceController@slug')->name('admin.settings.appearance.slug');
+        });
+
+        $router->group(['prefix' => 'conversions'], function (Router $router) {
+            $router->get('/', 'ConversionsController@form')->name('admin.settings.conversion');
+            $router->post('/', 'ConversionsController@status');
+            $router->post('store', 'ConversionsController@store')->name('admin.settings.conversion.store');
+        });
+
+        $router->group(['prefix' => 'restrictions'], function (Router $router) {
+            $router->get('/', 'RestrictionsController@form')->name('admin.settings.restrictions');
+            $router->post('/', 'RestrictionsController@store');
+            $router->post('maintenance', 'RestrictionsController@maintenance')->name('admin.settings.restrictions.maintenance');
+            $router->post('video', 'RestrictionsController@video')->name('admin.settings.restrictions.video');
+            $router->post('register', 'RestrictionsController@register')->name('admin.settings.restrictions.register');
+            $router->post('post-moderation', 'RestrictionsController@postModeration')->name('admin.settings.restrictions.post-moderation');
+        });
+
+        $router->group(['prefix' => 'social'], function (Router $router) {
+            $router->get('/', 'SocialController@form')->name('admin.settings.social');
+
+            $router->post('/', 'SocialController@status');
+
+            $router->post('facebook', 'SocialController@facebook')->name('admin.settings.social.facebook');
+            $router->post('google', 'SocialController@google')->name('admin.settings.social.google');
+            $router->post('twitter', 'SocialController@twitter')->name('admin.settings.social.twitter');
+        });
+
+        $router->group(['prefix' => 'analytics'], function (Router $router) {
+            $router->get('/', 'AnalyticsController@form')->name('admin.settings.analytics');
+            $router->post('/', 'AnalyticsController@store');
+        });
+
+        $router->group(['prefix' => 'captcha'], function (Router $router) {
+            $router->get('/', 'CaptchaController@form')->name('admin.settings.captcha');
+            $router->post('/', 'CaptchaController@store');
+        });
+
+        $router->group(['prefix' => 'email'], function (Router $router) {
+            $router->get('/', 'EmailController@form')->name('admin.settings.email');
+            $router->post('/', 'EmailController@store');
+            $router->post('support', 'EmailController@storeSupportEmail')->name('admin.settings.email.support');
+        });
+
+        $router->group(['prefix' => 'comments'], function (Router $router) {
+            $router->get('/', 'CommentsController@form')->name('admin.settings.comments');
+            $router->post('facebook', 'CommentsController@facebook')->name('admin.settings.comments.facebook');
+            $router->post('fb/id', 'CommentsController@fbId')->name('admin.settings.comments.fb.id');
+            $router->post('disqus/id', 'CommentsController@disqusId')->name('admin.settings.comments.disqus.id');
+            $router->post('disqus', 'CommentsController@disqus')->name('admin.settings.comments.disqus');
+            $router->post('local', 'CommentsController@local')->name('admin.settings.comments.local');
+        });
+
+    });
 });
+

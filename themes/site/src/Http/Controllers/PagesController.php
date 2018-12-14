@@ -2,10 +2,11 @@
 
 namespace Themes\Site\Http\Controllers;
 
-use Smile\Http\Requests\ContactRequest;
 use Smile\Core\Mailers\UserMailer;
+use Smile\Http\Requests\ContactRequest;
 
-class PagesController extends BaseSiteController {
+class PagesController extends BaseSiteController
+{
 
     /**
      * Terms page
@@ -44,7 +45,7 @@ class PagesController extends BaseSiteController {
      */
     public function contact()
     {
-        if ( ! canContact()) {
+        if (!canContact()) {
             return redirect()->route('home');
         }
 
@@ -60,7 +61,7 @@ class PagesController extends BaseSiteController {
      */
     public function doContact(ContactRequest $request, UserMailer $mailer)
     {
-        if ( ! canContact()) {
+        if (!canContact()) {
             return redirect()->route('home');
         }
 

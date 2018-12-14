@@ -87,9 +87,9 @@ class CommentRepository extends BaseRepository implements CommentContract
                 $query->where('user_id', $user ? $user->id : null);
             }
         ])
-        ->where('post_id', $id)
-        ->where('parent_id', null)
-        ->orderBy('id', 'desc');
+            ->where('post_id', $id)
+            ->where('parent_id', null)
+            ->orderBy('id', 'desc');
 
         return $comments->paginate($perPage);
     }

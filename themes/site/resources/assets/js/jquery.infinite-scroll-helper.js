@@ -2,7 +2,7 @@
  * @author Ryan Ogden
  */
 
-;(function($, window) {
+;(function ($, window) {
 
     'use strict';
 
@@ -13,7 +13,7 @@
     /** Plugin Defaults */
     /*-------------------------------------------- */
 
-    var	defaults = {
+    var defaults = {
         /**
          * The amount of pixels from the bottom of the scrolling element in which the loadMore callback will be invoked
          * @type {number}
@@ -69,6 +69,7 @@
 
     /*-------------------------------------------- */
     /** Plugin Constructor */
+
     /*-------------------------------------------- */
 
     /**
@@ -101,7 +102,7 @@
      * Initializes the plugin
      * @private
      */
-    Plugin.prototype._init = function() {
+    Plugin.prototype._init = function () {
         this._addListeners();
 
         /* Call initial begin load if option is true. If not, simulate a scroll incase
@@ -119,7 +120,7 @@
      * @return {jQuery} The jQuery wrapped element
      * @private
      */
-    Plugin.prototype._getLoadingClassTarget = function() {
+    Plugin.prototype._getLoadingClassTarget = function () {
         return this.options.loadingClassTarget ? $(this.options.loadingClassTarget) : this.$element;
     };
 
@@ -128,7 +129,7 @@
      * scroll content
      * @return {jQuery} The jQuery object that wraps the scroll container
      */
-    Plugin.prototype._getScrollContainer = function() {
+    Plugin.prototype._getScrollContainer = function () {
         var $scrollContainer = null;
 
         // see if the target element is overflow-y:scroll. If so, it is the
@@ -139,7 +140,7 @@
 
         // see if a parent is overflow-y:scroll. If so, it is the scroll container
         if (!$scrollContainer) {
-            $scrollContainer = this.$element.parents().filter(function() {
+            $scrollContainer = this.$element.parents().filter(function () {
                 return $(this).css('overflow-y') == 'scroll';
             });
         }
@@ -155,10 +156,10 @@
      * Adds listeners required for plugin to function
      * @private
      */
-    Plugin.prototype._addListeners = function() {
+    Plugin.prototype._addListeners = function () {
         var self = this;
 
-        this.$scrollContainer.on('scroll.' + pluginName, debounce(function() {
+        this.$scrollContainer.on('scroll.' + pluginName, debounce(function () {
             self._handleScroll();
         }, this.options.debounceInt));
     };
@@ -167,7 +168,7 @@
      * Removes all listeners required by the plugin
      * @private
      */
-    Plugin.prototype._removeListeners = function() {
+    Plugin.prototype._removeListeners = function () {
         this.$scrollContainer.off('scroll.' + pluginName);
     };
 
@@ -175,7 +176,7 @@
      * Handles the scroll logic and determins when to trigger the load more callback
      * @private
      */
-    Plugin.prototype._handleScroll = function(e) {
+    Plugin.prototype._handleScroll = function (e) {
         var self = this;
 
         if (this._shouldTriggerLoad()) {
@@ -184,7 +185,7 @@
             // if a the doneLoading callback was provided, set an interval to check when to call it
             if (this.options.doneLoading) {
                 this.doneLoadingInt = setInterval(
-                    function() {
+                    function () {
                         if (self.options.doneLoading(self.pageCount)) {
                             self._endLoadMore();
                         }
@@ -200,7 +201,7 @@
      * @return {boolean} true if the load more callback should be triggered, false otherwise
      * @private
      */
-    Plugin.prototype._shouldTriggerLoad = function() {
+    Plugin.prototype._shouldTriggerLoad = function () {
         var elementBottom = this._getElementHeight(),
             scrollBottom = this.$scrollContainer.scrollTop() + this.$scrollContainer.height() + this.options.bottomBuffer;
 
@@ -212,7 +213,7 @@
      * @return {number} The height of the element being scrolled
      * @private
      */
-    Plugin.prototype._getElementHeight = function() {
+    Plugin.prototype._getElementHeight = function () {
         if (this.$element == this.$scrollContainer) {
             return this.$element[0].scrollHeight;
         } else {
@@ -225,10 +226,10 @@
      * @param  {number} delay The amount of time, in milliseconds, to wait before calling the load more callback
      * @private
      */
-    Plugin.prototype._beginLoadMore = function(delay) {
+    Plugin.prototype._beginLoadMore = function (delay) {
         delay = delay || 0;
 
-        setTimeout($.proxy(function() {
+        setTimeout($.proxy(function () {
             this.pageCount++;
             this.options.loadMore(this.pageCount, $.proxy(this._endLoadMore, this));
             this.$loadingClassTarget.addClass(this.options.loadingClass);
@@ -242,7 +243,7 @@
      * Return the plugin to the not loading state
      * @private
      */
-    Plugin.prototype._endLoadMore = function() {
+    Plugin.prototype._endLoadMore = function () {
         clearInterval(this.doneLoadingInt);
         this.loading = false;
         this.$loadingClassTarget.removeClass(this.options.loadingClass);
@@ -257,7 +258,7 @@
      * Destroys the plugin instance
      * @public
      */
-    Plugin.prototype.destroy = function() {
+    Plugin.prototype.destroy = function () {
         this._removeListeners();
         this.options.loadMore = null;
         this.options.doneLoading = null;
@@ -272,7 +273,7 @@
 
     // A utility method for calling methods on the plugin instance
     function callMethod(instance, method, args) {
-        if ( instance && $.isFunction(instance[method]) ) {
+        if (instance && $.isFunction(instance[method])) {
             instance[method].apply(instance, args);
         }
     }
@@ -281,9 +282,9 @@
     function debounce(func, wait, immediate) {
         var timeout;
 
-        return function() {
+        return function () {
             var context = this, args = arguments;
-            var later = function() {
+            var later = function () {
                 timeout = null;
                 if (!immediate) func.apply(context, args);
             };
@@ -298,7 +299,7 @@
     /** Plugin Definition */
     /*-------------------------------------------- */
 
-    $.fn[pluginName] = function(options) {
+    $.fn[pluginName] = function (options) {
         var method = false,
             methodArgs = arguments;
 
@@ -306,7 +307,7 @@
             method = options;
         }
 
-        return this.each(function() {
+        return this.each(function () {
 
             var plugin = $.data(this, namespace);
 

@@ -30,7 +30,7 @@ class UserMailer extends Mailer
     public function contact(array $data)
     {
         $email = setting('email.support');
-        $subject = 'Contact: '.$data['subject'];
+        $subject = 'Contact: ' . $data['subject'];
         $view = 'emails.contact';
 
         $this->send($view, $data, $subject, $email);

@@ -1,8 +1,8 @@
 <?php namespace Extensions\Watermark\Listeners;
 
-use IonutMilica\LaravelSettings\SettingsContract;
 use Exception;
 use Intervention\Image\ImageManager;
+use IonutMilica\LaravelSettings\SettingsContract;
 use Smile\Events\Post\BeforeMediaUpload;
 
 class AttachWatermark
@@ -40,7 +40,7 @@ class AttachWatermark
         if ($watermark == null) {
             // If there is no provided image just silently abort
             //@TODO: Log this fail into the admin panel
-            return ;
+            return;
         }
 
         $watermarkPos = $this->settings->get('watermark.position', 'top-center');

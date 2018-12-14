@@ -1,10 +1,11 @@
 <?php namespace Smile\Events\Post;
 
-use Smile\Events\Event;
-use Intervention\Image\Image;
 use Illuminate\Queue\SerializesModels;
+use Intervention\Image\Image;
+use Smile\Events\Event;
 
-class BeforeMediaUpload extends Event {
+class BeforeMediaUpload extends Event
+{
 
     use SerializesModels;
     /**

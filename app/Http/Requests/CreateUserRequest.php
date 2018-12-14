@@ -29,7 +29,7 @@ class CreateUserRequest extends Request
             'g-recaptcha-response' => 'required|captcha'
         ];
 
-        if ( ! setting('captcha.secret')) {
+        if (!setting('captcha.secret')) {
             unset($rules['g-recaptcha-response']);
         }
 

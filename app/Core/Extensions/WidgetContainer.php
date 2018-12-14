@@ -39,7 +39,7 @@ class WidgetContainer
      */
     public function render($section, array $data = [])
     {
-        if ( ! isset($this->views[$section])) {
+        if (!isset($this->views[$section])) {
             return '';
         }
 

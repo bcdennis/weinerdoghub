@@ -9,7 +9,8 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group">
                 <label for="email">{{ __('Email') }}</label>
-                <input type="email" @if ($errors->has('email')) class="error" @endif name="email" id="email"  value="{{ old('email') }}" placeholder="name@email.com">
+                <input type="email" @if ($errors->has('email')) class="error" @endif name="email" id="email"
+                       value="{{ old('email') }}" placeholder="name@email.com">
                 @if ($errors->has('email'))
                     <span class="error-text">
                         {{ $errors->first('email') }}

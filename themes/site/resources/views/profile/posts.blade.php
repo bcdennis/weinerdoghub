@@ -33,8 +33,10 @@
             </div>
             <div class="form-group dropdown-checkboxes-wrapper categories">
                 <div class="dropdown-checkboxes">
-                    <span class="cts categories-selected">{{ __('Select a category') }} ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
-                    <span class="categories-selected-text hide">{{ __('Select a category') }} ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
+                    <span class="cts categories-selected">{{ __('Select a category') }}
+                        ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
+                    <span class="categories-selected-text hide">{{ __('Select a category') }}
+                        ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
                     <span class="caret"></span>
                 </div>
                 <ul class="checkboxes-list" data-max-cat="{{ setting('maximum-categories', 2) }}">
@@ -42,7 +44,8 @@
                         @if ( ! $category->template || $category->template == 'nsfw')
                             <li>
                                 <label>{{ $category->title }}
-                                    <input type="checkbox" class="c-{{ $category->id }}" name="categories[{{ $category->slug }}]" value="{{ $category->slug }}">
+                                    <input type="checkbox" class="c-{{ $category->id }}"
+                                           name="categories[{{ $category->slug }}]" value="{{ $category->slug }}">
                                 </label>
                             </li>
                         @endif

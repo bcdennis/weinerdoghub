@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\Guard;
 
 class AdminAuthenticate
 {
-
     /**
      * The Guard implementation.
      *
@@ -18,7 +17,7 @@ class AdminAuthenticate
     /**
      * Create a new filter instance.
      *
-     * @param  Guard  $auth
+     * @param  Guard $auth
      */
     public function __construct(Guard $auth)
     {
@@ -28,14 +27,13 @@ class AdminAuthenticate
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->guest() || ! in_array($this->auth->user()->permission, ['admin', 'demo']))
-        {
+        if ($this->auth->guest() || !in_array($this->auth->user()->permission, ['admin', 'demo'])) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {

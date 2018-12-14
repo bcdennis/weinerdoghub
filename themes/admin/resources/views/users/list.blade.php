@@ -79,7 +79,7 @@
                             </table>
                         </div>
                         <nav class="text-center">
-                            {!! paginator($users->appends(Input::except(['page']))) !!}
+                            {!! $users->appends(\Request::except(['page']))->links() !!}
                         </nav>
                     </div> <!-- end of users-list -->
                 </div> <!-- end of ibox-content -->

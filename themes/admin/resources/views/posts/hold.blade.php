@@ -92,7 +92,7 @@
                             </table>
                         </div> <!-- end of table-responsive -->
                         <nav class="text-center">
-                            {!! paginator($hold->appends(Input::except(['page']))) !!}
+                            {!! $hold->appends(Request::except(['page']))->links() !!}
                         </nav>
                     </div> <!-- end of posts-list -->
                 </div> <!-- end of ibox-content -->

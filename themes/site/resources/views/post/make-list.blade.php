@@ -23,14 +23,18 @@
                 </div>
 
                 <div class="form-group description">
-                    <label for="list-description" class="sr-only">{{ __('List Description') }} ({{ __('optional') }})</label>
-                    <textarea name="description" id="list-description" placeholder="{{ __('List Description') }} ({{ __('optional') }})"></textarea>
+                    <label for="list-description" class="sr-only">{{ __('List Description') }} ({{ __('optional') }}
+                        )</label>
+                    <textarea name="description" id="list-description"
+                              placeholder="{{ __('List Description') }} ({{ __('optional') }})"></textarea>
                 </div>
 
                 <div class="form-group list-category dropdown-checkboxes-wrapper categories">
                     <div class="dropdown-checkboxes">
-                        <span class="categories-selected">{{ __('Select a category') }} ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
-                        <span class="categories-selected-text hide">{{ __('Select a category') }} ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
+                        <span class="categories-selected">{{ __('Select a category') }}
+                            ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
+                        <span class="categories-selected-text hide">{{ __('Select a category') }}
+                            ({{ __('max') }} {{ setting('maximum-categories', 2) }})</span>
                         <span class="caret"></span>
                     </div>
                     <ul class="checkboxes-list" data-max-cat="{{ setting('maximum-categories', 2) }}">
@@ -38,7 +42,8 @@
                             @if ( ! $category->template || $category->template == 'nsfw' || $category->template == 'meme')
                                 <li>
                                     <label>{{ $category->title }}
-                                        <input type="checkbox" name="categories[{{ $category->slug }}]" value="{{ $category->slug }}">
+                                        <input type="checkbox" name="categories[{{ $category->slug }}]"
+                                               value="{{ $category->slug }}">
                                     </label>
                                 </li>
                             @endif
@@ -81,8 +86,10 @@
                     </div>
 
                     <div class="form-group description">
-                        <label for="item-description" class="sr-only">{{ __('Description') }} ({{ __('optional') }})</label>
-                        <textarea name="items[0][description]" id="item-description" placeholder="{{ __('Description') }} ({{ __('optional') }})"></textarea>
+                        <label for="item-description" class="sr-only">{{ __('Description') }} ({{ __('optional') }}
+                            )</label>
+                        <textarea name="items[0][description]" id="item-description"
+                                  placeholder="{{ __('Description') }} ({{ __('optional') }})"></textarea>
                     </div>
                 </div> <!-- end of list-item-container -->
             </div> <!-- end of list-items-wrapper -->

@@ -1,17 +1,11 @@
 <?php
+
 namespace Smile\Core\Services;
 
 use Exception;
 use Illuminate\Http\Request;
 use Smile\Core\Contracts\Embed\ManagerContract;
 use Smile\Core\Contracts\Image\UploaderContract;
-use Smile\Events\Comment\CommentWasCreated;
-use Smile\Events\Post\PostWasAccepted;
-use Smile\Events\Post\PostWasCreated;
-use Smile\Events\Post\PostWasDeleted;
-use Smile\Events\Post\PostWasVoted;
-use Smile\Events\Post\PostWasUnvoted;
-use Smile\Exceptions\DataSourceException;
 use Smile\Core\Persistence\Models\Post;
 use Smile\Core\Persistence\Models\User;
 use Smile\Core\Persistence\Repositories\ActivityContract;
@@ -20,6 +14,13 @@ use Smile\Core\Persistence\Repositories\CommentContract;
 use Smile\Core\Persistence\Repositories\PostContract;
 use Smile\Core\Persistence\Repositories\UserContract;
 use Smile\Core\Persistence\Repositories\VoteContract;
+use Smile\Events\Comment\CommentWasCreated;
+use Smile\Events\Post\PostWasAccepted;
+use Smile\Events\Post\PostWasCreated;
+use Smile\Events\Post\PostWasDeleted;
+use Smile\Events\Post\PostWasUnvoted;
+use Smile\Events\Post\PostWasVoted;
+use Smile\Exceptions\DataSourceException;
 
 class PostService
 {
@@ -118,7 +119,7 @@ class PostService
                 try {
                     $this->create($user, $item, 'item');
                 } catch (Exception $e) {
-                    throw new Exception($pos.'.'.(isset($item['media']) ? 'media' : 'link'));
+                    throw new Exception($pos . '.' . (isset($item['media']) ? 'media' : 'link'));
                 }
             }
 
@@ -148,7 +149,7 @@ class PostService
         $slug = ($slug == '') ? str_random(14) : $slug;
 
         $data['media'] = isset($data['link']) ? $data['link'] : $data['media'];
-        $data['slug'] = $user->id.'-'.mt_rand(10000, 99999).'-'.$slug;
+        $data['slug'] = $user->id . '-' . mt_rand(10000, 99999) . '-' . $slug;
 
         if ($this->embed->isEmbeddable($data['media'])) {
             $data = $this->processPostWithVideo($data);
@@ -162,16 +163,16 @@ class PostService
 
         $data['user_id'] = $user->id;
         $data['description'] = isset($data['description']) ? preg_replace('#<.*?>#i', '', $data['description']) : '';
-        $data['accepted'] = ! setting('post-moderation', false);
+        $data['accepted'] = !setting('post-moderation', false);
 
         $post = $this->post->create($data);
 
-        if ( ! $post) {
+        if (!$post) {
             throw new DataSourceException;
         }
 
         $this->post->update($post, [
-            'slug' => ($activeSlug ? $post->id.'-' : '').$slug,
+            'slug' => ($activeSlug ? $post->id . '-' : '') . $slug,
         ]);
 
         if ($type != 'item') {
@@ -183,21 +184,35 @@ class PostService
     }
 
     /**
-     * Update post views
+     * Process post with video
      *
-     * @param Post $post
-     * @param Request $request
+     * @param array $data
+     * @return array
+     * @throws Exception
      */
-    public function updateViews(Post $post, Request $request)
+    protected function processPostWithVideo(array $data)
     {
-        $session = $request->session();
-        $posts = $session->get('posts', []);
+        $post = null;
 
-        if ( ! in_array($post->id, $posts)) {
-            $posts[] = $post->id;
-            $this->post->update($post, ['views' => $post->views + 1]);
-            $session->put('posts', $posts);
+        foreach ($this->embed->all() as $embedder) {
+            if ($embedder->canEmbed($data['media'])) {
+                $post = $embedder->process($data);
+                break;
+            }
         }
+
+        return $post;
+    }
+
+    /**
+     * Process post with image
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function processPostWithImage(array $data)
+    {
+        return $this->imageUploadService->uploadPostImage($data);
     }
 
     /**
@@ -231,35 +246,21 @@ class PostService
     }
 
     /**
-     * Process post with image
+     * Update post views
      *
-     * @param array $data
-     * @return array
+     * @param Post $post
+     * @param Request $request
      */
-    protected function processPostWithImage(array $data)
+    public function updateViews(Post $post, Request $request)
     {
-        return $this->imageUploadService->uploadPostImage($data);
-    }
+        $session = $request->session();
+        $posts = $session->get('posts', []);
 
-    /**
-     * Process post with video
-     *
-     * @param array $data
-     * @return array
-     * @throws Exception
-     */
-    protected function processPostWithVideo(array $data)
-    {
-        $post = null;
-
-        foreach ($this->embed->all() as $embedder) {
-            if ($embedder->canEmbed($data['media'])) {
-                $post = $embedder->process($data);
-                break;
-            }
+        if (!in_array($post->id, $posts)) {
+            $posts[] = $post->id;
+            $this->post->update($post, ['views' => $post->views + 1]);
+            $session->put('posts', $posts);
         }
-
-        return $post;
     }
 
     /**
@@ -386,7 +387,7 @@ class PostService
     {
         $post = $this->post->findById($id);
 
-        if ( ! $post) {
+        if (!$post) {
             return false;
         }
 
@@ -418,7 +419,7 @@ class PostService
     {
         $post = $this->post->findById($id);
 
-        if ( ! $post) {
+        if (!$post) {
             return false;
         }
 
@@ -441,7 +442,7 @@ class PostService
     {
         $post = $this->post->findById($id);
 
-        if ( ! $post) {
+        if (!$post) {
             return false;
         }
 

@@ -2,10 +2,12 @@
 
 namespace Themes\Site;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class ThemeServiceProvider extends ServiceProvider
 {
+    private $themeNamespace = 'Themes\Site\Http\Controllers';
 
     /**
      * Register the service provider.
@@ -14,15 +16,14 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['router']->group(['namespace' => 'Themes\Site\Http\Controllers'], function ($router) {
-            require __DIR__.'/Http/routes.php';
-        });
-        require __DIR__.'/helpers.php';
+        require __DIR__ . '/helpers.php';
     }
 
     public function boot()
     {
-        //
+        Route::middleware('web')
+            ->namespace($this->themeNamespace)
+            ->group(__DIR__ . '/Http/routes.php');
     }
 
 }

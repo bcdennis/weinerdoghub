@@ -2,26 +2,27 @@
 
 namespace Smile\Events\User;
 
-use Smile\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Smile\Core\Persistence\Models\User;
+use Smile\Events\Event;
 
-class UserWasCreated extends Event {
+class UserWasCreated extends Event
+{
 
-	use SerializesModels;
+    use SerializesModels;
 
-	/**
-	 * @var User
-	 */
-	public $user;
+    /**
+     * @var User
+     */
+    public $user;
 
     /**
      * Create a new event instance.
      * @param User $user
      */
-	public function __construct(User $user)
-	{
-		$this->user = $user;
-	}
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
 
 }

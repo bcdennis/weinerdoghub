@@ -19,7 +19,8 @@
                 <div>
                     <label for="avatar">{{ __('Avatar') }}</label>
                     <input @if($errors->has('avatar')) class="error" @endif type="file" name="avatar" id="avatar">
-                    <a href="{{ route('account.settings.reset-avatar') }}" class="btn btn-text" type="submit">{{ __('Use default') }}</a>
+                    <a href="{{ route('account.settings.reset-avatar') }}" class="btn btn-text"
+                       type="submit">{{ __('Use default') }}</a>
                     @if ($errors->has('avatar'))
                         <span class="error-text">{{ $errors->first('avatar') }}</span>
                     @endif
@@ -53,7 +54,8 @@
                 @endif
 
                 <label for="repeatedPassword" class="sr-only">{{ __('Repeat the New Password') }}</label>
-                <input type="password" name="password_confirmation" id="repeatedPassword" placeholder="{{ __('Repeat the New Password') }}">
+                <input type="password" name="password_confirmation" id="repeatedPassword"
+                       placeholder="{{ __('Repeat the New Password') }}">
                 @if ($errors->has('password_confirmation'))
                     <span class="error-text">{{ $errors->first('password_confirmation') }}</span>
                 @endif

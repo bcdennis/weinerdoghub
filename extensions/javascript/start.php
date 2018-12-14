@@ -3,7 +3,8 @@
 use Illuminate\Routing\Router;
 use Smile\Core\Extensions\Extension;
 
-class JavascriptExtension extends Extension {
+class JavascriptExtension extends Extension
+{
 
     public $settingsRoute = 'admin.extensions.javascript.settings';
 

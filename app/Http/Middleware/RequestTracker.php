@@ -5,7 +5,8 @@ use Closure;
 use Illuminate\Cookie\CookieJar;
 use Smile\Core\Persistence\Repositories\StatContract;
 
-class RequestTracker {
+class RequestTracker
+{
     /**
      * @var CookieJar
      */
@@ -17,38 +18,44 @@ class RequestTracker {
 
     /**
      * Create a new filter instance.
+     * Todo: Inject the decrypter
      *
      * @param CookieJar $cookieJar
      * @param StatContract $stat
      */
-	public function __construct(CookieJar $cookieJar, StatContract $stat)
-	{
+    public function __construct(CookieJar $cookieJar, StatContract $stat)
+    {
         $this->cookieJar = $cookieJar;
         $this->stat = $stat;
     }
 
-	/**
-	 * Handle an incoming request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
-	 * @return mixed
-	 */
-	public function handle($request, Closure $next)
-	{
-        if (php_sapi_name() == 'cli' || ! INSTALLED) {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        if (php_sapi_name() == 'cli' || !INSTALLED) {
             return $next($request);
         }
 
         $lastUpdate = $request->cookie('last_visit');
+        if ($lastUpdate === null) {
+            return $next($request);
+        }
 
-        if ( ! $lastUpdate || $lastUpdate->day != Carbon::now()->day) {
+        $lastUpdate = decrypt($lastUpdate);
+
+        if (!$lastUpdate || $lastUpdate->day != Carbon::now()->day) {
             $this->stat->increment('visits');
             $cookie = $this->cookieJar->forever('last_visit', Carbon::now());
             $this->cookieJar->queue($cookie);
         }
 
-		return $next($request);
-	}
+        return $next($request);
+    }
 
 }

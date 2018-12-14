@@ -3,7 +3,8 @@
 use Illuminate\Routing\Router;
 use Smile\Core\Extensions\Extension;
 
-class AdsExtension extends Extension {
+class AdsExtension extends Extension
+{
 
     public $settingsRoute = 'admin.extensions.ads.settings';
 
@@ -18,15 +19,15 @@ class AdsExtension extends Extension {
 
             $router->post('status', [
                 'uses' => 'SettingsController@status',
-                'as'   => 'admin.extensions.ads.settings.status'
+                'as' => 'admin.extensions.ads.settings.status'
             ]);
             $router->post('upload', [
                 'uses' => 'SettingsController@upload',
-                'as'   => 'admin.extensions.ads.settings.upload'
+                'as' => 'admin.extensions.ads.settings.upload'
             ], 'admin/extensions/ads/settings');
         });
 
-        require __DIR__.'/helpers.php';
+        require __DIR__ . '/helpers.php';
     }
 
     public function boot()

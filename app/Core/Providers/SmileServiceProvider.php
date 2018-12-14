@@ -1,9 +1,11 @@
 <?php
+
 namespace Smile\Core\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class SmileServiceProvider extends ServiceProvider {
+class SmileServiceProvider extends ServiceProvider
+{
 
     /**
      * Database driver

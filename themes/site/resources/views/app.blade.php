@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<!--[if IE 9]><html lang="en" class="lte-ie9"><![endif]-->
-<!--[if gt IE 9]><html lang="en" class="lte-ie9"><![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="lte-ie9"><![endif]-->
+<!--[if gt IE 9]>
+<html lang="en" class="lte-ie9"><![endif]-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,19 +15,30 @@
     @if (setting('favicon'))
         <link rel="icon" href="{{ media(setting('favicon')) }}">
     @else
-        <link rel="apple-touch-icon" sizes="57x57" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-57x57.png') }}">
-        <link rel="apple-touch-icon" sizes="60x60" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-60x60.png') }}">
-        <link rel="apple-touch-icon" sizes="72x72" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-72x72.png') }}">
-        <link rel="apple-touch-icon" sizes="76x76" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-76x76.png') }}">
-        <link rel="apple-touch-icon" sizes="114x114" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-114x114.png') }}">
-        <link rel="apple-touch-icon" sizes="120x120" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-120x120.png') }}">
-        <link rel="apple-touch-icon" sizes="144x144" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-144x144.png') }}">
-        <link rel="apple-touch-icon" sizes="152x152" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-152x152.png') }}">
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ assetTheme('assets/img/favicon/apple-touch-icon-180x180.png') }}">
+        <link rel="apple-touch-icon" sizes="57x57"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-57x57.png') }}">
+        <link rel="apple-touch-icon" sizes="60x60"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-60x60.png') }}">
+        <link rel="apple-touch-icon" sizes="72x72"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-72x72.png') }}">
+        <link rel="apple-touch-icon" sizes="76x76"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-76x76.png') }}">
+        <link rel="apple-touch-icon" sizes="114x114"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-114x114.png') }}">
+        <link rel="apple-touch-icon" sizes="120x120"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-120x120.png') }}">
+        <link rel="apple-touch-icon" sizes="144x144"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-144x144.png') }}">
+        <link rel="apple-touch-icon" sizes="152x152"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-152x152.png') }}">
+        <link rel="apple-touch-icon" sizes="180x180"
+              href="{{ assetTheme('assets/img/favicon/apple-touch-icon-180x180.png') }}">
         <link rel="icon" type="image/png" href="{{ assetTheme('assets/img/favicon/favicon-32x32.png') }}" sizes="32x32">
-        <link rel="icon" type="image/png" href="{{ assetTheme('assets/img/favicon/favicon-194x194.png') }}" sizes="194x194">
+        <link rel="icon" type="image/png" href="{{ assetTheme('assets/img/favicon/favicon-194x194.png') }}"
+              sizes="194x194">
         <link rel="icon" type="image/png" href="{{ assetTheme('assets/img/favicon/favicon-96x96.png') }}" sizes="96x96">
-        <link rel="icon" type="image/png" href="{{ assetTheme('assets/img/favicon/android-chrome-192x192.png') }}" sizes="192x192">
+        <link rel="icon" type="image/png" href="{{ assetTheme('assets/img/favicon/android-chrome-192x192.png') }}"
+              sizes="192x192">
         <link rel="icon" type="image/png" href="{{ assetTheme('assets/img/favicon/favicon-16x16.png') }}" sizes="16x16">
         <link rel="manifest" href="{{ assetTheme('assets/img/favicon/manifest.json') }}">
     @endif
@@ -38,9 +51,9 @@
     <meta name="lang.cancel" content="{{ __('Cancel') }}">
     @widget('meta-section')
     <title>
-    @section('title')
-        {{ setting('branding.title') }}
-    @show
+        @section('title')
+            {{ setting('branding.title') }}
+        @show
     </title>
     <link rel="stylesheet" href="{{ assetTheme('assets/css/main.css') }}">
     @widget('css-section')
@@ -56,7 +69,8 @@
 <header class="page-header">
     <div class="logo">
         <a href="{{ route('home') }}">
-            <img src="{{ setting('mobile-logo') ? media(setting('mobile-logo')) : assetTheme('assets/img/logo-mobile.png') }}" alt="Smile Logo">
+            <img src="{{ setting('mobile-logo') ? media(setting('mobile-logo')) : assetTheme('assets/img/logo-mobile.png') }}"
+                 alt="Smile Logo">
         </a>
     </div>
     <div class="header-actions">
@@ -80,14 +94,15 @@
     <aside class="col-1"> <!-- left sidebar -->
         <div class="logo">
             <a href="{{ route('home') }}">
-                <img src="{{ setting('logo') ? media(setting('logo')) : assetTheme('assets/img/logo.png') }}" alt="Smile Logo">
+                <img src="{{ setting('logo') ? media(setting('logo')) : assetTheme('assets/img/logo.png') }}"
+                     alt="Smile Logo">
             </a>
         </div>
         @if (auth()->user())
-        <div class="logged-in">
-            <img src="{{ avatar(auth()->user()->avatar) }}" alt="User Avatar">
-            <span class="user-name">{{ auth()->user()->name }}</span>
-        </div>
+            <div class="logged-in">
+                <img src="{{ avatar(auth()->user()->avatar) }}" alt="User Avatar">
+                <span class="user-name">{{ auth()->user()->name }}</span>
+            </div>
         @endif
         <nav class="global-navigation">
             <ul>
@@ -113,7 +128,8 @@
                     <a href="{{ route('about') }}">{{ lower(__('About Us')) }}</a>
                 </li>
                 @if ( ! auth()->check())
-                    <li><a href="#" class="modal-trigger" data-target=".modal-sign-up">{{ lower(__('Sign Up')) }}</a></li>
+                    <li><a href="#" class="modal-trigger" data-target=".modal-sign-up">{{ lower(__('Sign Up')) }}</a>
+                    </li>
                     <li><a href="#" class="modal-trigger" data-target=".modal-log-in">{{ lower(__('Log In')) }}</a></li>
                 @else
                     <li><a href="{{ route('logout') }}">{{ lower(__('Log out')) }}</a></li>
@@ -127,17 +143,18 @@
     <div class="main-content col-2">
         <header class="menu">
             <a href="{{ route('home') }}" class="fixed-logo">
-                <img src="{{ setting('mobile-logo') ? media(setting('mobile-logo')) : assetTheme('assets/img/logo-mobile.png') }}" alt="Mobile Logo">
+                <img src="{{ setting('mobile-logo') ? media(setting('mobile-logo')) : assetTheme('assets/img/logo-mobile.png') }}"
+                     alt="Mobile Logo">
             </a>
             <nav class="menu-items">
                 <ul>
                     @foreach ($categories as $pos => $category)
                         @if ($pos < 4)
-                        <li @if (activeCategory($category, $pos)) class="active" @endif>
-                            <a href="{{ route('home', $category->slug) }}">
-                                {{ $category->title }}
-                            </a>
-                        </li>
+                            <li @if (activeCategory($category, $pos)) class="active" @endif>
+                                <a href="{{ route('home', $category->slug) }}">
+                                    {{ $category->title }}
+                                </a>
+                            </li>
                         @endif
                     @endforeach
                     @if ($categories->count() > 4)
@@ -150,11 +167,11 @@
                 <ul class="more-menu-items hide dropdown">
                     @foreach ($categories as $pos => $category)
                         @if ($pos > 3)
-                        <li>
-                            <a href="{{ route('home', $category->slug) }}">
-                                {{ $category->title }}
-                            </a>
-                        </li>
+                            <li>
+                                <a href="{{ route('home', $category->slug) }}">
+                                    {{ $category->title }}
+                                </a>
+                            </li>
                         @endif
                     @endforeach
                 </ul>
@@ -214,28 +231,29 @@
 
 <div class="mobile-menu">
     @if (auth()->check())
-    <div class="mobile-logged-in">
-        <div class="user-avatar">
-            <img src="{{ avatar(auth()->user()->avatar) }}" alt="User Avatar">
-        </div>
-        <div class="user-meta">
-            <span class="user-name">{{ auth()->user()->name }}</span>
-            <span class="user-record">
-                {{ auth()->user()->points }} <span class="text-accent">{{ __choice('smiles', auth()->user()->points) }}</span> {{ __choice('points generated', auth()->user()->points) }}
+        <div class="mobile-logged-in">
+            <div class="user-avatar">
+                <img src="{{ avatar(auth()->user()->avatar) }}" alt="User Avatar">
+            </div>
+            <div class="user-meta">
+                <span class="user-name">{{ auth()->user()->name }}</span>
+                <span class="user-record">
+                {{ auth()->user()->points }} <span
+                            class="text-accent">{{ __choice('smiles', auth()->user()->points) }}</span> {{ __choice('points generated', auth()->user()->points) }}
             </span>
-        </div>
-        <form action="#">
-            <button type="submit"></button>
-        </form>
-    </div> <!-- end of mobile-logged-in -->
+            </div>
+            <form action="#">
+                <button type="submit"></button>
+            </form>
+        </div> <!-- end of mobile-logged-in -->
     @endif
     <nav>
         <ul>
             @widget('mobile-menu.before')
             <li><a href="{{ route('home') }}">{{ __('Home') }}</a></li>
             @if ( ! auth()->check())
-            <li><a href="#" class="modal-trigger" data-target=".modal-log-in">{{ __('Log In') }}</a></li>
-            <li><a href="#" class="modal-trigger" data-target=".modal-sign-up">{{ __('Sign Up') }}</a></li>
+                <li><a href="#" class="modal-trigger" data-target=".modal-log-in">{{ __('Log In') }}</a></li>
+                <li><a href="#" class="modal-trigger" data-target=".modal-sign-up">{{ __('Sign Up') }}</a></li>
             @endif
             @if (auth()->check())
                 <li><a href="{{ route('profile.overview', auth()->user()->name) }}">{{ __('Profile') }}</a></li>
@@ -298,9 +316,9 @@
             <li><a href="{{ route('top.yearly') }}">{{ __('This year top') }}</a></li>
             @foreach ($categories as $pos => $category)
                 @if ($pos >= 3)
-                <li>
-                    <a href="{{ route('home', $category->slug) }}">{{ $category->title }}</a>
-                </li>
+                    <li>
+                        <a href="{{ route('home', $category->slug) }}">{{ $category->title }}</a>
+                    </li>
                 @endif
             @endforeach
         </ul>
@@ -319,7 +337,8 @@
                 @if ($pos < 3)
                     <li>
                         <a href="{{ route('home', $category->slug) }}">
-                            <img src="{{ $category->icon ? media($category->icon) : assetTheme('assets/img/categories/default.png') }}" class="category-icon" alt="Images Category">
+                            <img src="{{ $category->icon ? media($category->icon) : assetTheme('assets/img/categories/default.png') }}"
+                                 class="category-icon" alt="Images Category">
                             {{ $category->title }}
                         </a>
                     </li>

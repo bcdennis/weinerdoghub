@@ -18,8 +18,8 @@ class PasswordsController extends BaseSiteController
     /**
      * Create a new password controller instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Guard  $auth
-     * @param  \Illuminate\Contracts\Auth\PasswordBroker  $passwords
+     * @param  \Illuminate\Contracts\Auth\Guard $auth
+     * @param  \Illuminate\Contracts\Auth\PasswordBroker $passwords
      */
 
     public function __construct(Guard $auth, PasswordBroker $passwords)
@@ -33,8 +33,6 @@ class PasswordsController extends BaseSiteController
 
     /**
      * Display the form to request a password reset link.
-     *
-     * @return Response
      */
     public function getEmail()
     {
@@ -44,7 +42,7 @@ class PasswordsController extends BaseSiteController
     /**
      * Send a reset link to the given user.
      *
-     * @param  Request  $request
+     * @param  Request $request
      * @return Response
      */
     public function postEmail(Request $request)
@@ -55,13 +53,11 @@ class PasswordsController extends BaseSiteController
             return redirect()->back();
         }
 
-        $response = $this->passwords->sendResetLink($request->only('email'), function($m)
-        {
+        $response = $this->passwords->sendResetLink($request->only('email'), function ($m) {
             $m->subject($this->getEmailSubject());
         });
 
-        switch ($response)
-        {
+        switch ($response) {
             case PasswordBroker::RESET_LINK_SENT:
                 return redirect()->back()->with('status', trans($response));
 
@@ -73,8 +69,8 @@ class PasswordsController extends BaseSiteController
     /**
      * Display the password reset view for the given token.
      *
-     * @param  string  $token
-     * @return Response
+     * @param  string $token
+     * @return \Illuminate\View\View
      */
     public function getReset($token = null)
     {

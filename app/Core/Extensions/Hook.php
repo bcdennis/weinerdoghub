@@ -2,7 +2,8 @@
 
 namespace Smile\Core\Extensions;
 
-class Hook {
+class Hook
+{
 
     /**
      * @var array $hooks
@@ -18,7 +19,7 @@ class Hook {
      */
     public function listen($hook, $closure = null)
     {
-        if ( ! $this->has($hook)) {
+        if (!$this->has($hook)) {
             $this->hooks[$hook] = [];
         }
 
@@ -35,7 +36,7 @@ class Hook {
     {
         return isset($this->hooks[$hook]);
     }
-    
+
     /**
      * Fire a hook.
      *
@@ -45,9 +46,9 @@ class Hook {
      */
     public function fire($hook, &$result = '')
     {
-        if ( ! isset($this->hooks[$hook])) return $result;
+        if (!isset($this->hooks[$hook])) return $result;
 
-        foreach($this->hooks[$hook] as $closure) {
+        foreach ($this->hooks[$hook] as $closure) {
             $callResult = $closure($result);
 
             if ($callResult !== false) {

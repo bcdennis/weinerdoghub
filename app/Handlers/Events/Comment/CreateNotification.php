@@ -1,9 +1,10 @@
 <?php namespace Smile\Handlers\Events\Comment;
 
-use Smile\Events\Comment\CommentWasCreated;
 use Smile\Core\Persistence\Repositories\NotificationContract;
+use Smile\Events\Comment\CommentWasCreated;
 
-class CreateNotification {
+class CreateNotification
+{
     /**
      * @var NotificationContract
      */
@@ -23,7 +24,7 @@ class CreateNotification {
     /**
      * Handle the event.
      *
-     * @param  CommentWasCreated  $event
+     * @param  CommentWasCreated $event
      * @return void
      */
     public function handle(CommentWasCreated $event)

@@ -59,10 +59,27 @@ class ThemeManager
     }
 
     /**
+     * Load in the memory all the available themes
+     *
+     * @return array
+     */
+    protected function loadThemes()
+    {
+        $directories = $this->filesystem->directories($this->path);
+
+        foreach ($directories as $directory) {
+            $theme = basename($directory);
+            $this->themes[$theme] = $theme;
+        }
+
+        return $this->themes;
+    }
+
+    /**
      * Activate a specific theme
      *
      * @param $name
-     * @return bool
+     * @return bool|Theme
      */
     public function activate($name)
     {
@@ -73,7 +90,7 @@ class ThemeManager
         $theme = new Theme($this->path, $name);
         $provider = $theme->getServiceProvider();
 
-        $this->loadPsr4($theme->getNamespace(), $theme->getPath().'/src/');
+        $this->loadPsr4($theme->getNamespace(), $theme->getPath() . '/src/');
         $this->app->register(new $provider($this->app));
 
         $this->activeThemes[$name] = $theme;
@@ -104,23 +121,6 @@ class ThemeManager
     public function getActiveThemes()
     {
         return $this->activeThemes;
-    }
-
-    /**
-     * Load in the memory all the available themes
-     *
-     * @return array
-     */
-    protected function loadThemes()
-    {
-        $directories = $this->filesystem->directories($this->path);
-
-        foreach ($directories as $directory) {
-            $theme = basename($directory);
-            $this->themes[$theme] = $theme;
-        }
-
-        return $this->themes;
     }
 
 }

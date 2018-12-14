@@ -3,23 +3,21 @@
 namespace Smile\Core\Services;
 
 use Illuminate\Database\Eloquent\Model;
-use Smile\Events\Comment\CommentWasUnvoted;
-use Smile\Events\Comment\CommentWasVoted;
 use Smile\Core\Persistence\Models\Comment;
-use Smile\Core\Persistence\Models\CommentReport;
-use Smile\Core\Persistence\Models\Post;
 use Smile\Core\Persistence\Models\User;
 use Smile\Core\Persistence\Repositories\CommentContract;
 use Smile\Core\Persistence\Repositories\CommentReportContract;
 use Smile\Core\Persistence\Repositories\PostContract;
 use Smile\Core\Persistence\Repositories\VoteContract;
+use Smile\Events\Comment\CommentWasUnvoted;
+use Smile\Events\Comment\CommentWasVoted;
 
 class CommentService
 {
-	/**
-	 * @var CommentContract
-	 */
-	private $comment;
+    /**
+     * @var CommentContract
+     */
+    private $comment;
     /**
      * @var VoteContract
      */
@@ -39,12 +37,12 @@ class CommentService
      * @param CommentReportContract $commentReport
      * @param PostContract $post
      */
-	public function __construct(CommentContract $comment,
+    public function __construct(CommentContract $comment,
                                 VoteContract $vote,
                                 CommentReportContract $commentReport,
                                 PostContract $post)
-	{
-		$this->comment = $comment;
+    {
+        $this->comment = $comment;
         $this->vote = $vote;
         $this->commentReport = $commentReport;
         $this->post = $post;
@@ -68,7 +66,7 @@ class CommentService
             event(new CommentWasUnvoted($user, $model, $value));
         } else {
             $this->vote->update($vote, $value);
-            event(new CommentWasVoted($user,$model, $value));
+            event(new CommentWasVoted($user, $model, $value));
         }
 
         return $this->comment->updateVotes($model);
@@ -84,11 +82,11 @@ class CommentService
     {
         $comment = $this->comment->findById($commentId);
 
-        if ( ! $comment) {
+        if (!$comment) {
             return false;
         }
 
-        $sub = ! $comment->parent_id ? $comment->comments + 1 : 1;
+        $sub = !$comment->parent_id ? $comment->comments + 1 : 1;
 
         $this->post->update($comment->post, ['comments' => $comment->post->comments - $sub]);
 

@@ -9,38 +9,38 @@ use Smile\Core\Persistence\Repositories\PostReportContract;
 
 class PostReportRepository extends BaseRepository implements PostReportContract
 {
-	/**
-	 * @param PostReport $model
-	 */
+    /**
+     * @param PostReport $model
+     */
     public function __construct(PostReport $model)
     {
         $this->model = $model;
     }
 
-	/**
-	 * @param User $user
-	 * @param Post $post
-	 * @param $reason
-	 * @return PostReport
-	 */
+    /**
+     * @param User $user
+     * @param Post $post
+     * @param $reason
+     * @return PostReport
+     */
     public function create(User $user, Post $post, $reason)
     {
         $report = $this->getNew();
         $report->fill([
             'user_id' => $user->id,
             'post_id' => $post->id,
-            'reason'  => $reason,
+            'reason' => $reason,
         ]);
         $report->save();
 
         return $report;
     }
 
-	/**
-	 * Count post reports
-	 *
-	 * @return mixed
-	 */
+    /**
+     * Count post reports
+     *
+     * @return mixed
+     */
     public function count()
     {
         return $this->model->count();
@@ -57,9 +57,9 @@ class PostReportRepository extends BaseRepository implements PostReportContract
     public function findByUserAndPost(User $user, Post $post, $reason)
     {
         return $this->model->where('user_id', $user->id)
-                       ->where('post_id', $post->id)
-                       ->where('reason', $reason)
-                       ->first();
+            ->where('post_id', $post->id)
+            ->where('reason', $reason)
+            ->first();
     }
 
     /**
@@ -72,14 +72,14 @@ class PostReportRepository extends BaseRepository implements PostReportContract
     public function all($q = null, $perPage = 10)
     {
         $reports = $this->model->with(['post.user', 'user'])
-          ->orderBy('id', 'desc')
-          ->groupBy('post_id')
-          ->groupBy('reason')
-          ->whereHas('post', function ($query) use ($q) {
-              if ($q) {
-                  $query->where('title', 'like', '%'.$this->escape($q).'%');
-              }
-          });
+            ->orderBy('id', 'desc')
+            ->groupBy('post_id')
+            ->groupBy('reason')
+            ->whereHas('post', function ($query) use ($q) {
+                if ($q) {
+                    $query->where('title', 'like', '%' . $this->escape($q) . '%');
+                }
+            });
 
         return $reports->paginate($perPage);
     }

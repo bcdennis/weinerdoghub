@@ -24,8 +24,6 @@ class BaseSettingController extends BaseAdminController
      */
     public function __construct(SettingsContract $settings, Filesystem $filesystem)
     {
-        $this->middleware('auth.admin');
-
         $this->settings = $settings;
         $this->filesystem = $filesystem;
     }

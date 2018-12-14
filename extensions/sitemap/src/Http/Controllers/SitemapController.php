@@ -1,4 +1,5 @@
 <?php
+
 namespace Extensions\Sitemap\Http\Controllers;
 
 use Carbon\Carbon;
@@ -45,7 +46,7 @@ class SitemapController extends Controller
     {
         $this->sitemap->setCache('laravel.sitemap', 3600);
 
-        if ( ! $this->sitemap->isCached()) {
+        if (!$this->sitemap->isCached()) {
             $this->sitemap->add(route('home'), Carbon::now()->toW3cString(), '1.0', 'daily');
 
             foreach ($this->category->allActive() as $category) {

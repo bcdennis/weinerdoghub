@@ -9,7 +9,8 @@
         @endforeach
         @if ($comment->comments > 2)
             <div class="comment reply-comment more-{{ $comment->id }}">
-                <a href="#" class="more" data-last="{{ $child->id }}" data-parent="{{ $comment->id }}" data-url="{{ route('comments.more', $comment->id) }}">
+                <a href="#" class="more" data-last="{{ $child->id }}" data-parent="{{ $comment->id }}"
+                   data-url="{{ route('comments.more', $comment->id) }}">
                     {{ __('Load more replies') }}
                 </a>
             </div>

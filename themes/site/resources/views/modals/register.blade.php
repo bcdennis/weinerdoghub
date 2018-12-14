@@ -1,6 +1,7 @@
 <div class="modal modal-sign-up">
     <button class="modal-close"><span>x</span></button>
-    <img src="{{ setting('logo') ? media(setting('logo')) : assetTheme('assets/img/logo.png') }}" class="modal-logo" alt="Smile Logo">
+    <img src="{{ setting('logo') ? media(setting('logo')) : assetTheme('assets/img/logo.png') }}" class="modal-logo"
+         alt="Smile Logo">
     <form action="{{ route('register') }}" method="post" id="register-form">
         <div class="form-group general"></div>
         <div class="form-group name">

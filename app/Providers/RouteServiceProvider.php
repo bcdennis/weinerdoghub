@@ -1,10 +1,12 @@
-<?php namespace Smile\Providers;
+<?php
 
-use Illuminate\Routing\Router;
+namespace Smile\Providers;
+
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\Route;
 
-class RouteServiceProvider extends ServiceProvider {
+class RouteServiceProvider extends ServiceProvider
+{
 
     /**
      * This namespace is applied to the controller routes in your routes file.
@@ -16,56 +18,64 @@ class RouteServiceProvider extends ServiceProvider {
     protected $namespace = 'Smile\Http\Controllers';
 
     /**
+     * @var string
+     */
+    protected $installerNamespace = 'Smile\Http\Controllers\Installer';
+
+    /**
      * Define your route model bindings, pattern filters, etc.
      *
-     * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function boot(Router $router)
+    public function boot()
     {
-        parent::boot($router);
+        //
+        parent::boot();
 
-        $router->bind('post', function ($value) {
+        Route::bind('post', function ($value) {
             $postRepo = $this->app->make('Smile\Core\Persistence\Repositories\PostContract');
-
-            $post = $postRepo->findWithRelationships($value, auth()->user());
-
-            if ( ! $post) {
-                throw new NotFoundHttpException;
-            }
-
-            return $post;
+            return $postRepo->findWithRelationships($value, auth()->user()) ?? abort(404);
         });
 
-        $router->bind('user', function ($value) {
+        Route::bind('user', function ($value) {
             $userService = $this->app->make('Smile\Core\Services\UserService');
-            $user = $userService->getByName($value);
-
-            if ( ! $user) {
-                throw new NotFoundHttpException;
-            }
-
-            return $user;
+            return $userService->getByName($value) ?? abort(404);
         });
     }
 
     /**
      * Define the routes for the application.
      *
-     * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function map(Router $router)
+    public function map()
     {
-        $router->group(['namespace' => $this->namespace], function(Router $router)
-        {
-            if (INSTALLED) {
-                $router->group(['namespace' => 'Api', 'prefix' => 'api'], function ($router) {
-                    require app_path('Http/api.php');
-                });
-            }
-
-        });
+        if (INSTALLED) {
+            $this->mapApiRoutes();
+        } else {
+            $this->mapInstallerRoutes();
+        }
     }
 
+    /**
+     * Define the "api" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiRoutes()
+    {
+        Route::prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
+    }
+
+    protected function mapInstallerRoutes()
+    {
+        Route::namespace($this->installerNamespace)
+            ->middleware('web')
+            ->group(base_path('routes/installer.php'));
+    }
 }

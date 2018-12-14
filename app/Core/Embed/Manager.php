@@ -1,4 +1,5 @@
 <?php
+
 namespace Smile\Core\Embed;
 
 use Smile\Core\Contracts\Embed\ManagerContract;
@@ -50,7 +51,7 @@ class Manager implements ManagerContract
      */
     public function isEmbeddable($url)
     {
-        if ( ! count($this->embedders)) {
+        if (!count($this->embedders)) {
             return false;
         }
 
@@ -62,7 +63,7 @@ class Manager implements ManagerContract
 
         $regex = implode('|', $regex);
 
-        return preg_match('#'.$regex.'#', $url);
+        return preg_match('#' . $regex . '#', $url);
     }
 
 }

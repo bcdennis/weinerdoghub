@@ -17,23 +17,6 @@ class StatRepository extends BaseRepository implements StatContract
     }
 
     /**
-     * @param $key
-     * @param $value
-     * @param $month
-     * @param $year
-     * @return Stat
-     */
-    public function create($key, $value, $month, $year)
-    {
-        return $this->model->create([
-            'key' => $key,
-            'value' => $value,
-            'month' => $month,
-            'year' => $year,
-        ]);
-    }
-
-    /**
      * Create stat
      *
      * @param $key
@@ -73,24 +56,40 @@ class StatRepository extends BaseRepository implements StatContract
             $year = $carbon->year;
         }
 
-        if ( ! $month || ! $year) {
+        if (!$month || !$year) {
             $month = $carbon->month;
             $year = $carbon->year;
         }
 
         $stat = $this->model->where('key', $key)
-                            ->where('month', $month)
-                            ->where('year', $year);
+            ->where('month', $month)
+            ->where('year', $year);
 
         $stat = $stat->first();
 
-        if ( ! $stat) {
+        if (!$stat) {
             $stat = $this->create($key, 0, $month, $year);
         }
 
         return $stat;
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @param $month
+     * @param $year
+     * @return Stat
+     */
+    public function create($key, $value, $month, $year)
+    {
+        return $this->model->create([
+            'key' => $key,
+            'value' => $value,
+            'month' => $month,
+            'year' => $year,
+        ]);
+    }
 
     /**
      * Count the values of a stat

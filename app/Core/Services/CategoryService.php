@@ -1,4 +1,5 @@
 <?php
+
 namespace Smile\Core\Services;
 
 use Smile\Core\Contracts\Image\UploaderContract;
@@ -116,7 +117,7 @@ class CategoryService
 
         if ($category) {
             return $this->category->update($category, [
-                'active' => (bool) $active
+                'active' => (bool)$active
             ]);
         }
 
@@ -152,8 +153,7 @@ class CategoryService
      */
     public function order($order)
     {
-        foreach ($order as $pos => $id)
-        {
+        foreach ($order as $pos => $id) {
             $category = $this->category->findById($id);
 
             if ($category) {

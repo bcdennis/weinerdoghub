@@ -1,5 +1,5 @@
 <!-- notifications -->
-<button type="button" class="btn-notifications" data-url="{{ route('notifications.read') }}">
+<button type="button" class="btn-notifications" data-url="{{ route('notifications.read', 1) }}">
     {{ __('Notifications') }}
     @if ($unread > 0)
         <span class="badge badge-notifications">{{ $unread }}</span>

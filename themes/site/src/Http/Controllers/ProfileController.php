@@ -41,6 +41,21 @@ class ProfileController extends BaseSiteController
     }
 
     /**
+     * Respond with json
+     *
+     * @param $activities
+     * @param User $user
+     * @param $view
+     * @return array
+     */
+    protected function respondWithJson($activities, User $user, $view)
+    {
+        $view = $this->view($view, compact('activities', 'user'));
+
+        return $this->jsonPagination($activities, $view);
+    }
+
+    /**
      * User smiles
      *
      * @param User $user
@@ -92,21 +107,6 @@ class ProfileController extends BaseSiteController
         }
 
         return $this->view('profile.comments', compact('user', 'activities'));
-    }
-
-    /**
-     * Respond with json
-     *
-     * @param $activities
-     * @param User $user
-     * @param $view
-     * @return array
-     */
-    protected function respondWithJson($activities, User $user, $view)
-    {
-        $view = $this->view($view, compact('activities', 'user'));
-
-        return $this->jsonPagination($activities, $view);
     }
 
 }

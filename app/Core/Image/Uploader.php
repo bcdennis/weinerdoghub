@@ -1,12 +1,13 @@
 <?php
+
 namespace Smile\Core\Image;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Intervention\Image\ImageManager;
 use Smile\Core\Contracts\Image\UploaderContract;
-use Smile\Events\Post\BeforeMediaUpload;
 use Smile\Core\Persistence\Models\Category;
 use Smile\Core\Persistence\Models\User;
+use Smile\Events\Post\BeforeMediaUpload;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Uploader implements UploaderContract
@@ -63,16 +64,42 @@ class Uploader implements UploaderContract
      */
     public function avatar(User $user, $file)
     {
-        $file = ! is_object($file) ? explode('?', $file)[0] : $file;
+        $file = !is_object($file) ? explode('?', $file)[0] : $file;
         $name = sprintf('user_%d', $user->id);
         $extension = $this->getExtension($file);
 
         $format = sprintf('uploads/profile/%s.%s', $name, $extension);
 
         $image = $this->imageManager->make($this->getPath($file))->resize(105, 105);
-        $this->filesystem->put($format, (string) $image->encode());
+        $this->filesystem->put($format, (string)$image->encode());
 
         return $format;
+    }
+
+    /**
+     * Get extension for uploaded file or url
+     *
+     * @param $file
+     * @return mixed|string
+     */
+    protected function getExtension($file)
+    {
+        if ($file instanceof UploadedFile) {
+            return $file->getClientOriginalExtension();
+        }
+
+        return pathinfo($file, PATHINFO_EXTENSION);
+    }
+
+    /**
+     * Get path from file
+     *
+     * @param $file
+     * @return string
+     */
+    protected function getPath($file)
+    {
+        return ($file instanceof UploadedFile) ? $file->getRealPath() : $file;
     }
 
     /**
@@ -89,7 +116,7 @@ class Uploader implements UploaderContract
         $format = sprintf('uploads/categories/%s.%s', $category->id, $extension);
 
         $image = $this->imageManager->make($this->getPath($file));
-        $this->filesystem->put($format, (string) $image->encode());
+        $this->filesystem->put($format, (string)$image->encode());
 
         return $format;
     }
@@ -118,7 +145,7 @@ class Uploader implements UploaderContract
         $ext = $this->getExtension($file);
         $name = sprintf('%s.%s', $data['slug'], $ext);
 
-        $data['type'] = $ext == 'gif' ? 'gif' : 'image';
+        $data['type'] = strtolower($ext) === 'gif' ? 'gif' : 'image';
 
         if ($data['type'] == 'gif') {
             return $this->uploadGif($name, $data);
@@ -138,14 +165,14 @@ class Uploader implements UploaderContract
 
         event(new BeforeMediaUpload($small, $thumbnail, $big));
 
-        $this->filesystem->put($bigDir.$name, (string) $big->encode());
-        $this->filesystem->put($smallDir.$name, (string) $small->encode());
-        $this->filesystem->put($thumbDir.$name, (string) $thumbnail->encode());
+        $this->filesystem->put($bigDir . $name, (string)$big->encode());
+        $this->filesystem->put($smallDir . $name, (string)$small->encode());
+        $this->filesystem->put($thumbDir . $name, (string)$thumbnail->encode());
 
         $data['resized'] = $wasResized;
-        $data['media'] = $bigDir.$name;
-        $data['featured'] = $smallDir.$name;
-        $data['thumbnail'] = $thumbDir.$name;
+        $data['media'] = $bigDir . $name;
+        $data['featured'] = $smallDir . $name;
+        $data['thumbnail'] = $thumbDir . $name;
 
         return $data;
     }
@@ -165,7 +192,7 @@ class Uploader implements UploaderContract
         list($smallDir, $thumbDir, $bigDir) = $this->directories();
 
         if (setting('conversion.on') && function_exists('shell_exec')) {
-            if ( ! is_object($file)) {
+            if (!is_object($file)) {
                 $temp = $this->tempPath($data['slug']);
                 copy($file, $temp);
                 $file = new UploadedFile($temp, $data['slug']);
@@ -173,9 +200,9 @@ class Uploader implements UploaderContract
             $data['type'] = 'video';
 
             // Temp files
-            $tempFrame = $this->tempPath($data['slug'].'.png');
-            $tempMp4 = $this->tempPath($data['slug'].'.mp4');
-            $tempwebM = $this->tempPath($data['slug'].'.webm');
+            $tempFrame = $this->tempPath($data['slug'] . '.png');
+            $tempMp4 = $this->tempPath($data['slug'] . '.mp4');
+            $tempwebM = $this->tempPath($data['slug'] . '.webm');
 
             $converter = setting('conversion.binaries.ffmpeg', '/opt/ffmpeg/bin/ffmpeg');
 
@@ -187,16 +214,16 @@ class Uploader implements UploaderContract
             $thumbnail = $this->thumbnail($tempFrame, $resized);
 
             // Move the videos to the uploads
-            $this->filesystem->put($bigDir.$data['slug'].'.mp4', file_get_contents($tempMp4));
-            $this->filesystem->put($bigDir.$data['slug'].'.webm', file_get_contents($tempwebM));
+            $this->filesystem->put($bigDir . $data['slug'] . '.mp4', file_get_contents($tempMp4));
+            $this->filesystem->put($bigDir . $data['slug'] . '.webm', file_get_contents($tempwebM));
 
-            $this->filesystem->put($bigDir.$data['slug'].'.jpeg', file_get_contents($tempFrame));
-            $this->filesystem->put($smallDir.$data['slug'].'.jpeg', (string) $featured->encode());
-            $this->filesystem->put($thumbDir.$data['slug'].'.jpeg', (string) $thumbnail->encode());
+            $this->filesystem->put($bigDir . $data['slug'] . '.jpeg', file_get_contents($tempFrame));
+            $this->filesystem->put($smallDir . $data['slug'] . '.jpeg', (string)$featured->encode());
+            $this->filesystem->put($thumbDir . $data['slug'] . '.jpeg', (string)$thumbnail->encode());
 
-            $data['media'] = $bigDir.$data['slug'].'.jpeg';
-            $data['thumbnail'] = $thumbDir.$data['slug'].'.jpeg';
-            $data['featured'] = $smallDir.$data['slug'].'.jpeg';
+            $data['media'] = $bigDir . $data['slug'] . '.jpeg';
+            $data['thumbnail'] = $thumbDir . $data['slug'] . '.jpeg';
+            $data['featured'] = $smallDir . $data['slug'] . '.jpeg';
 
             if (isset($temp)) unlink($temp);
             unlink($tempFrame);
@@ -208,14 +235,14 @@ class Uploader implements UploaderContract
             $thumbnail = $this->thumbnail($file, $resized);
             $featured = $this->featured($file);
 
-            $this->filesystem->put($bigDir.$name, file_get_contents($this->getPath($file)));
-            $this->filesystem->put($smallDir.$name, (string) $featured->encode());
-            $this->filesystem->put($thumbDir.$name, (string) $thumbnail->encode());
+            $this->filesystem->put($bigDir . $name, file_get_contents($this->getPath($file)));
+            $this->filesystem->put($smallDir . $name, (string)$featured->encode());
+            $this->filesystem->put($thumbDir . $name, (string)$thumbnail->encode());
 
             // Register data
-            $data['media'] = $bigDir.$name;
-            $data['thumbnail'] = $thumbDir.$name;
-            $data['featured'] = $smallDir.$name;
+            $data['media'] = $bigDir . $name;
+            $data['thumbnail'] = $thumbDir . $name;
+            $data['featured'] = $smallDir . $name;
 
         }
 
@@ -223,26 +250,34 @@ class Uploader implements UploaderContract
     }
 
     /**
-     * Helper for small image uploading
+     * Get directories
      *
-     * @param array $data
-     * @param $url
-     * @return string
+     * @return array
      */
-    public function uploadSmallImage(array $data, $url)
+    protected function directories()
     {
-        $name = sprintf('post_%s.jpg', $data['slug']);
-        $date = sprintf('%s/%s', date('Y'), date('m'));
+        $format = 'uploads/posts/%s/' . date('Y') . '/' . date('m') . '/';
 
-        $format = 'uploads/posts/%s/'.$date.'/';
         $smallDir = sprintf($format, 'small');
+        $bigDir = sprintf($format, 'big');
+        $thumbDir = sprintf($format, 'thumbnail');
 
         $this->ensureDirectoryExistence($smallDir);
+        $this->ensureDirectoryExistence($bigDir);
+        $this->ensureDirectoryExistence($thumbDir);
 
-        $small = $this->featured($url);
-        $this->filesystem->put($smallDir.$name, (string) $small->encode());
+        return [$smallDir, $thumbDir, $bigDir];
+    }
 
-        return $smallDir.$name;
+    /**
+     * Creates directory if it does not exists
+     *
+     * @param $directory
+     * @return bool
+     */
+    protected function ensureDirectoryExistence($directory)
+    {
+        return $this->filesystem->makeDirectory($directory);
     }
 
     /**
@@ -253,7 +288,7 @@ class Uploader implements UploaderContract
      */
     protected function tempPath($file)
     {
-        return storage_path('app/'.$file);
+        return storage_path('app/' . $file);
     }
 
     /**
@@ -308,60 +343,26 @@ class Uploader implements UploaderContract
     }
 
     /**
-     * Get directories
+     * Helper for small image uploading
      *
-     * @return array
-     */
-    protected function directories()
-    {
-        $format = 'uploads/posts/%s/'.date('Y').'/'.date('m').'/';
-
-        $smallDir = sprintf($format, 'small');
-        $bigDir = sprintf($format, 'big');
-        $thumbDir = sprintf($format, 'thumbnail');
-
-        $this->ensureDirectoryExistence($smallDir);
-        $this->ensureDirectoryExistence($bigDir);
-        $this->ensureDirectoryExistence($thumbDir);
-
-        return [$smallDir, $thumbDir, $bigDir];
-    }
-
-    /**
-     * Get path from file
-     *
-     * @param $file
+     * @param array $data
+     * @param $url
      * @return string
      */
-    protected function getPath($file)
+    public function uploadSmallImage(array $data, $url)
     {
-        return ($file instanceof UploadedFile) ? $file->getRealPath() : $file;
-    }
+        $name = sprintf('post_%s.jpg', $data['slug']);
+        $date = sprintf('%s/%s', date('Y'), date('m'));
 
-    /**
-     * Get extension for uploaded file or url
-     *
-     * @param $file
-     * @return mixed|string
-     */
-    protected function getExtension($file)
-    {
-        if ($file instanceof UploadedFile) {
-            return $file->getClientOriginalExtension();
-        }
+        $format = 'uploads/posts/%s/' . $date . '/';
+        $smallDir = sprintf($format, 'small');
 
-        return pathinfo($file, PATHINFO_EXTENSION);
-    }
+        $this->ensureDirectoryExistence($smallDir);
 
-    /**
-     * Creates directory if it does not exists
-     *
-     * @param $directory
-     * @return bool
-     */
-    protected function ensureDirectoryExistence($directory)
-    {
-        return $this->filesystem->makeDirectory($directory);
+        $small = $this->featured($url);
+        $this->filesystem->put($smallDir . $name, (string)$small->encode());
+
+        return $smallDir . $name;
     }
 
 }

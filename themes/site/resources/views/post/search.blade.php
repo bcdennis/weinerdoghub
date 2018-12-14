@@ -9,7 +9,7 @@
         <div class="searched-for">
             <p>{{ __('You searched for') }}: '<em>{{ $searchStr }}</em> '</p>
         </div>
-    @if (count($posts) > 0)
+        @if (count($posts) > 0)
             @foreach ($posts as $post)
                 <article>
                     @include('site::partials.post', ['post' => $post])

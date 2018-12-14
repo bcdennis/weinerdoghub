@@ -1,12 +1,12 @@
 <?php namespace Smile\Handlers\Events\User;
 
 use Illuminate\Contracts\Auth\Guard;
-use Smile\Events\User\UserWasCreated;
-
 use Smile\Core\Mailers\UserMailer;
 use Smile\Core\Services\UserService;
+use Smile\Events\User\UserWasCreated;
 
-class SendConfirmationMail {
+class SendConfirmationMail
+{
     /**
      * @var UserMailer
      */
@@ -36,12 +36,12 @@ class SendConfirmationMail {
     /**
      * Handle the event.
      *
-     * @param  UserWasCreated  $event
+     * @param  UserWasCreated $event
      * @return void
      */
     public function handle(UserWasCreated $event)
     {
-        if ( ! canContact()) {
+        if (!canContact()) {
             $this->auth->login($event->user);
             return;
         }

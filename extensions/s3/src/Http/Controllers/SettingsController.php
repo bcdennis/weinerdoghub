@@ -32,7 +32,7 @@ class SettingsController extends BaseSettingController
         foreach ($request->all() as $field => $value) {
             if ($field[0] == '_') continue;
 
-            $this->settings->set('extensions.s3.'.$field, $value);
+            $this->settings->set('extensions.s3.' . $field, $value);
         }
 
         return redirect()->back();

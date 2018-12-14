@@ -2,11 +2,12 @@
 
 namespace Smile\Events\User;
 
-use Smile\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Smile\Core\Persistence\Models\User;
+use Smile\Events\Event;
 
-class UserCreatedThroughOAuth extends Event {
+class UserCreatedThroughOAuth extends Event
+{
 
     use SerializesModels;
 

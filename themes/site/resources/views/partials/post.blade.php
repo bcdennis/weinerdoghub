@@ -5,8 +5,8 @@
 </h2>
 <div class="post-meta">
     <p>
-       <span class="smiles-number-{{ $post->id }}">{{ formatNumber($post->points) }}</span>
-       <span class="text-accent">{{ __('smile') }}</span> {{ __choice('points', $post->points) }}
+        <span class="smiles-number-{{ $post->id }}">{{ formatNumber($post->points) }}</span>
+        <span class="text-accent">{{ __('smile') }}</span> {{ __choice('points', $post->points) }}
     </p>
     <span class="divide-meta">.</span>
     <p>{{ formatNumber($post->views) }} <span class="text-accent">{{ __choice('views', $post->views) }}</span></p>
@@ -14,7 +14,9 @@
 
 @if (auth()->check() && $post->user_id == auth()->user()->id && Route::currentRouteName() == 'profile.posts')
     <div class="post-actions">
-        <button type="button" class="btn-edit-post modal-trigger" data-edit="{{ route('posts.edit', $post->id) }}" data-info="{{ route('posts.info', $post->id) }}" data-id="{{ $post->id }}" data-target=".modal-edit-post"></button>
+        <button type="button" class="btn-edit-post modal-trigger" data-edit="{{ route('posts.edit', $post->id) }}"
+                data-info="{{ route('posts.info', $post->id) }}" data-id="{{ $post->id }}"
+                data-target=".modal-edit-post"></button>
         <form action="{{ route('posts.delete', $post->id) }}" method="post">
             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             <input type="hidden" name="_method" value="delete">

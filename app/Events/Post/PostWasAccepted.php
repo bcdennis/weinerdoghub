@@ -1,10 +1,11 @@
 <?php namespace Smile\Events\Post;
 
-use Smile\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Smile\Core\Persistence\Models\Post;
+use Smile\Events\Event;
 
-class PostWasAccepted extends Event {
+class PostWasAccepted extends Event
+{
 
     use SerializesModels;
 

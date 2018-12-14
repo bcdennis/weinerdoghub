@@ -2,9 +2,7 @@
 
 namespace Themes\Site\Http\Controllers;
 
-use Illuminate\Auth\Guard;
 use Illuminate\Http\Request;
-use Smile\Core\Persistence\Models\Comment;
 use Smile\Core\Persistence\Models\Post;
 use Smile\Core\Persistence\Repositories\CommentContract;
 use Smile\Core\Services\CommentService;
@@ -30,19 +28,16 @@ class CommentsController extends BaseSiteController
 
     /**
      * @param CommentContract $comment
-     * @param Guard $auth
      * @param CommentService $commentService
      * @param ReportService $report
      */
     public function __construct(CommentContract $comment,
-                                Guard $auth,
                                 CommentService $commentService,
                                 ReportService $report
     )
     {
         $this->middleware('auth', ['only' => 'vote']);
 
-        $this->currentUser = $auth->user();
         $this->comment = $comment;
         $this->commentService = $commentService;
         $this->report = $report;
@@ -61,32 +56,34 @@ class CommentsController extends BaseSiteController
             'value' => 'required|in:-1,0,1'
         ]);
 
-        $comment = $this->comment->findById($comment, $this->currentUser);
+        $comment = $this->comment->findById($comment, $request->user());
 
-        if ( ! $comment) {
+        if (!$comment) {
             throw new NotFoundHttpException;
         }
 
         $value = $request->get('value');
 
-        return $this->commentService->vote($this->currentUser, $comment, $value);
+        return $this->commentService->vote($request->user(), $comment, $value);
     }
 
     /**
      * Report comment
      *
+     * @param Request $request
      * @param $comment
      * @return mixed
      */
-    public function report($comment)
+    public function report(Request $request, $comment)
     {
-        $comment = $this->comment->findById($comment, $this->currentUser);
+        $user = $request->user();
+        $comment = $this->comment->findById($comment, $user);
 
-        if ( ! $comment) {
+        if (!$comment) {
             throw new NotFoundHttpException;
         }
 
-        $this->report->createCommentReport($this->currentUser, $comment);
+        $this->report->createCommentReport($user, $comment);
 
         return [];
     }
@@ -94,14 +91,15 @@ class CommentsController extends BaseSiteController
     /**
      * Delete comment
      *
+     * @param Request $request
      * @param $comment
      * @return array
      */
-    public function delete($comment)
+    public function delete(Request $request, $comment)
     {
-        $comment = $this->comment->findById($comment, $this->currentUser);
+        $comment = $this->comment->findById($comment, $request->user());
 
-        if ( ! $comment) {
+        if (!$comment) {
             throw new NotFoundHttpException;
         }
 
@@ -119,7 +117,8 @@ class CommentsController extends BaseSiteController
      */
     public function loadComments(Post $post, Request $request)
     {
-        $comments = $this->comment->findByPostId($post->id, $this->currentUser, 10);
+        $user = $request->user();
+        $comments = $this->comment->findByPostId($post->id, $user, 10);
 
         $partial = $this->view('partials.comments', compact('comments', 'post'));
 
@@ -133,20 +132,22 @@ class CommentsController extends BaseSiteController
     /**
      * More comments for parent comment
      *
-     * @param $comment
      * @param Request $request
-     * @return null|\Smile\Core\Persistence\Models\Comment
+     * @param $comment
+     * @return array
+     * @throws \Throwable
      */
-    public function loadMore($comment, Request $request)
+    public function loadMore(Request $request, $comment)
     {
+        $user = $request->user();
         $comment = $this->comment->findById($comment);
 
-        if ( ! $comment) {
+        if (!$comment) {
             return [];
         }
 
-        $last = ((int) $request->get('last', 0));
-        $comments = $this->comment->findByParentId($comment->id, $this->currentUser, $last, 5);
+        $last = ((int)$request->get('last', 0));
+        $comments = $this->comment->findByParentId($comment->id, $user, $last, 5);
         $post = $comment->post;
 
         $partial = $this->view('partials.more-comments', compact('comments', 'post'))->render();
@@ -154,7 +155,7 @@ class CommentsController extends BaseSiteController
         return [
             'partial' => $partial,
             'total' => count($comments),
-            'last'    => $comments[$comments->count() - 1]->id,
+            'last' => $comments[$comments->count() - 1]->id,
             'hasMore' => $comments->count() != $comments->total()
         ];
     }

@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNsfwFieldToUsersTable extends Migration {
+class AddNsfwFieldToUsersTable extends Migration
+{
 
     /**
      * Run the migrations.
@@ -14,7 +15,7 @@ class AddNsfwFieldToUsersTable extends Migration {
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-           $table->boolean('nsfw')->default(true);
+            $table->boolean('nsfw')->default(true);
         });
     }
 

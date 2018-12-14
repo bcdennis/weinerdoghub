@@ -2,11 +2,12 @@
 
 namespace Smile\Handlers\Events\Comment;
 
-use Smile\Events\Comment\CommentWasCreated;
 use Smile\Core\Persistence\Repositories\ActivityContract;
 use Smile\Core\Persistence\Repositories\UserContract;
+use Smile\Events\Comment\CommentWasCreated;
 
-class LogCreationActivity {
+class LogCreationActivity
+{
 
     /**
      * @var ActivityContract
@@ -23,20 +24,20 @@ class LogCreationActivity {
      * @param ActivityContract $activity
      * @param UserContract $user
      */
-	public function __construct(ActivityContract $activity, UserContract $user)
-	{
-		$this->activity = $activity;
+    public function __construct(ActivityContract $activity, UserContract $user)
+    {
+        $this->activity = $activity;
         $this->user = $user;
     }
 
-	/**
-	 * Handle the event.
-	 *
-	 * @param  CommentWasCreated  $event
-	 * @return void
-	 */
-	public function handle(CommentWasCreated $event)
-	{
+    /**
+     * Handle the event.
+     *
+     * @param  CommentWasCreated $event
+     * @return void
+     */
+    public function handle(CommentWasCreated $event)
+    {
         $this->activity->create($event->user, $event->post, 'post.comment');
 
         $comments = $this->activity->countActivities($event->user, 'post.comment');
@@ -45,6 +46,6 @@ class LogCreationActivity {
             'comments' => $comments,
             'last_comment' => time(),
         ]);
-	}
+    }
 
 }

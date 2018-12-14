@@ -10,7 +10,8 @@
             <input type="hidden" name="token" value="{{ $token }}">
             <div class="form-group">
                 <label for="email">{{ __('Email') }}</label>
-                <input type="email" @if ($errors->has('email')) class="error" @endif name="email" id="email"  value="{{ old('email') }}" placeholder="name@email.com">
+                <input type="email" @if ($errors->has('email')) class="error" @endif name="email" id="email"
+                       value="{{ old('email') }}" placeholder="name@email.com">
                 @if ($errors->has('email'))
                     <span class="error-text">
                         {{ $errors->first('email') }}
@@ -19,7 +20,8 @@
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" @if ($errors->has('password')) class="error" @endif name="password" id="password">
+                <input type="password" @if ($errors->has('password')) class="error" @endif name="password"
+                       id="password">
                 @if ($errors->has('password'))
                     <span class="error-text">
                         {{ $errors->first('password') }}
@@ -29,7 +31,8 @@
 
             <div class="form-group">
                 <label for="password_confirmation">{{ __('Confirm password') }}</label>
-                <input type="password" @if ($errors->has('password_confirmation')) class="error" @endif name="password_confirmation" id="password_confirmation">
+                <input type="password" @if ($errors->has('password_confirmation')) class="error"
+                       @endif name="password_confirmation" id="password_confirmation">
                 @if ($errors->has('password_confirmation'))
                     <span class="error-text">
                         {{ $errors->first('password_confirmation') }}

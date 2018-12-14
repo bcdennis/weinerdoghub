@@ -1,4 +1,4 @@
-window.FormDataCompatibility = (function() {
+window.FormDataCompatibility = (function () {
 
     function FormDataCompatibility(form) {
         this.fields = {};
@@ -16,27 +16,27 @@ window.FormDataCompatibility = (function() {
         }
     }
 
-    FormDataCompatibility.prototype.getElementNameByIndex = function(index) {
+    FormDataCompatibility.prototype.getElementNameByIndex = function (index) {
         return '___form_element__' + index;	// Strange enough to avoid collision with user-defined names
     }
 
-    FormDataCompatibility.prototype.append = function(key, value) {
+    FormDataCompatibility.prototype.append = function (key, value) {
         return this.fields[key] = value;
     };
 
-    FormDataCompatibility.prototype.setContentTypeHeader = function(xhr) {
+    FormDataCompatibility.prototype.setContentTypeHeader = function (xhr) {
         return xhr.setRequestHeader("Content-Type", this.contentType);
     };
 
-    FormDataCompatibility.prototype.getContentType = function() {
+    FormDataCompatibility.prototype.getContentType = function () {
         return this.contentType;
     };
 
-    FormDataCompatibility.prototype.generateBoundary = function() {
+    FormDataCompatibility.prototype.generateBoundary = function () {
         return "AJAX--------------" + ((new Date).getTime());
     };
 
-    FormDataCompatibility.prototype.buildBody = function() {
+    FormDataCompatibility.prototype.buildBody = function () {
         var body, key, parts, value, _ref;
         parts = [];
         _ref = this.fields;
@@ -50,7 +50,7 @@ window.FormDataCompatibility = (function() {
         return body;
     };
 
-    FormDataCompatibility.prototype.buildPart = function(key, value) {
+    FormDataCompatibility.prototype.buildPart = function (key, value) {
         var part;
         if (typeof value === "string") {
             part = "Content-Disposition: form-data; name=\"" + key + "\"" + this.CRLF;

@@ -16,23 +16,28 @@
                                 If you want no ads on your website just click that switch button.
                             </p>
                             <p>
-                                By default you will have those 'space for ads' ads. If you want to add an ad using a provider you can paste the code from them in forms on the left side, or if you designed your own ad you can use the forms from the right.
+                                By default you will have those 'space for ads' ads. If you want to add an ad using a
+                                provider you can paste the code from them in forms on the left side, or if you designed
+                                your own ad you can use the forms from the right.
                             </p>
                         </div>
                     </div> <!-- end of row -->
                     <div class="row m-b-lg">
                         <div class="col-md-6 border-right">
                             <h2>Square Ads</h2>
-                            <form class="m-b-lg" role="form" method="post" action="{{ route('admin.extensions.ads.settings') }}">
+                            <form class="m-b-lg" role="form" method="post"
+                                  action="{{ route('admin.extensions.ads.settings') }}">
                                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                                 <div class="form-group">
                                     <label for="squareAdsProvider">Square Ads via Provider</label>
-                                    <textarea name="square-ad-code" id="squareAdsProvider" class="form-control">{{ setting('square-ad-code', '') }}</textarea>
+                                    <textarea name="square-ad-code" id="squareAdsProvider"
+                                              class="form-control">{{ setting('square-ad-code', '') }}</textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-normal">Save</button>
                             </form>
-                            <form role="form" method="post" action="{{ route('admin.extensions.ads.settings.upload') }}" enctype="multipart/form-data">
+                            <form role="form" method="post" action="{{ route('admin.extensions.ads.settings.upload') }}"
+                                  enctype="multipart/form-data">
                                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                                 <div class="form-group">
                                     <label for="mySquareAds">My Square Ad</label>
@@ -43,19 +48,23 @@
                         </div> <!-- end of square ads col -->
                         <div class="col-md-6">
                             <h2>Rectangle Ads</h2>
-                            <form class="m-b-lg" role="form" method="post" action="{{ route('admin.extensions.ads.settings') }}">
+                            <form class="m-b-lg" role="form" method="post"
+                                  action="{{ route('admin.extensions.ads.settings') }}">
                                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                                 <div class="form-group">
                                     <label for="rectangleAdsProvider">Rectangle Ads via Provider</label>
-                                    <textarea name="rectangle-ad-code" id="rectangleAdsProvider" class="form-control">{{ setting('rectangle-ad-code', '') }}</textarea>
+                                    <textarea name="rectangle-ad-code" id="rectangleAdsProvider"
+                                              class="form-control">{{ setting('rectangle-ad-code', '') }}</textarea>
                                 </div>
                                 <button type="submit" class="btn btn-normal">Save</button>
                             </form>
-                            <form role="form" method="post" action="{{ route('admin.extensions.ads.settings.upload') }}" enctype="multipart/form-data">
+                            <form role="form" method="post" action="{{ route('admin.extensions.ads.settings.upload') }}"
+                                  enctype="multipart/form-data">
                                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                                 <div class="form-group">
                                     <label for="myRectangleAds">My Rectangle Ad</label>
-                                    <input type="file" name="rectangle-ad-image" class="form-control" id="myRectangleAds">
+                                    <input type="file" name="rectangle-ad-image" class="form-control"
+                                           id="myRectangleAds">
                                 </div>
                                 <button type="submit" class="btn btn-normal">Save</button>
                             </form>

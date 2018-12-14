@@ -32,7 +32,7 @@ class SettingsController extends BaseSettingController
             'y' => 'required|numeric',
         ];
 
-        if ($request->hasFile('watermark') || ! $this->settings->get('watermark.image')) {
+        if ($request->hasFile('watermark') || !$this->settings->get('watermark.image')) {
             $rules['watermark'] = 'required|mimes:png';
         }
 
@@ -47,7 +47,7 @@ class SettingsController extends BaseSettingController
         $this->settings->set('watermark.offset.x', $request->get('x'));
         $this->settings->set('watermark.offset.y', $request->get('y'));
 
-        if ( ! isset($rules['watermark'])) {
+        if (!isset($rules['watermark'])) {
             return redirect()->back();
         }
 

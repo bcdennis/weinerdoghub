@@ -2,11 +2,12 @@
 
 namespace Smile\Events\User;
 
-use Smile\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Smile\Core\Persistence\Models\User;
+use Smile\Events\Event;
 
-class UserWasDeleted extends Event {
+class UserWasDeleted extends Event
+{
 
     use SerializesModels;
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Smile\Core\Extensions;
 
 use Illuminate\Foundation\Application;
@@ -8,46 +9,41 @@ use Illuminate\Support\ServiceProvider;
 abstract class Extension extends ServiceProvider
 {
     /**
+     * Check if extension has setting page
+     *
+     * @var bool
+     */
+    public $settingsRoute = false;
+    /**
      * Extension path
      *
      * @var string
      */
     protected $path;
-
     /**
      * Extension name
      *
      * @var string
      */
     protected $name;
-
     /**
      * We must know if the given extension si activated
      *
      * @var bool
      */
     protected $isActive = false;
-
     /**
      * Let module know if it's installed
      *
      * @var bool
      */
     protected $isInstalled = false;
-
     /**
      * Every extension will have information about author, version and so on
      *
      * @var array
      */
     protected $manifest = null;
-
-    /**
-     * Check if extension has setting page
-     *
-     * @var bool
-     */
-    public $settingsRoute = false;
 
     /**
      * @param $path string
@@ -65,13 +61,25 @@ abstract class Extension extends ServiceProvider
     }
 
     /**
-     * Get extension name
+     * Load extension data
+     */
+    protected function loadManifest()
+    {
+        if ($this->manifest) {
+            return;
+        }
+
+        $this->manifest = json_decode(file_get_contents($this->path . '/info.json'));
+    }
+
+    /**
+     * Get extension path to the source code
      *
      * @return string
      */
-    public function getName()
+    public function getSourcePath()
     {
-        return $this->name;
+        return $this->getPath() . '/src/';
     }
 
     /**
@@ -85,44 +93,46 @@ abstract class Extension extends ServiceProvider
     }
 
     /**
-     * Get extension path to the source code
-     *
-     * @return string
-     */
-    public function getSourcePath()
-    {
-        return $this->getPath().'/src/';
-    }
-
-    /**
      * Method called on app booting
      */
-    public function boot() {}
+    public function boot()
+    {
+    }
 
     /**
      * Method called on service register
      */
-    public function register() {}
+    public function register()
+    {
+    }
 
     /**
      * Things we do on module installation
      */
-    public function onInstall() {}
+    public function onInstall()
+    {
+    }
 
     /**
      * Things we do on module uninstall
      */
-    public function onUninstall() {}
+    public function onUninstall()
+    {
+    }
 
     /**
      * Method called on module install
      */
-    public function onActivate() {}
+    public function onActivate()
+    {
+    }
 
     /**
      * Method called on module uninstall
      */
-    public function onDeactivate() {}
+    public function onDeactivate()
+    {
+    }
 
     /**
      * Set extension active or no
@@ -182,28 +192,18 @@ abstract class Extension extends ServiceProvider
      */
     public function loadResources()
     {
-        $this->loadViewsFrom($this->path.'/resources/views/', 'ext-'.$this->getName());
-        $this->loadTranslationsFrom($this->path.'/resources/lang/', $this->getName());
+        $this->loadViewsFrom($this->path . '/resources/views/', 'ext-' . $this->getName());
+        $this->loadTranslationsFrom($this->path . '/resources/lang/', $this->getName());
     }
 
     /**
-     * Source path for assets
+     * Get extension name
      *
      * @return string
      */
-    public function assetsFromSource()
+    public function getName()
     {
-        return $this->path.'/resources/assets';
-    }
-
-    /**
-     * Public path for the assets
-     *
-     * @return string
-     */
-    public function assetsFromPublic()
-    {
-        return public_path('extensions/'.$this->getName().'/assets');
+        return $this->name;
     }
 
     /**
@@ -219,11 +219,31 @@ abstract class Extension extends ServiceProvider
     }
 
     /**
+     * Source path for assets
+     *
+     * @return string
+     */
+    public function assetsFromSource()
+    {
+        return $this->path . '/resources/assets';
+    }
+
+    /**
+     * Public path for the assets
+     *
+     * @return string
+     */
+    public function assetsFromPublic()
+    {
+        return public_path('extensions/' . $this->getName() . '/assets');
+    }
+
+    /**
      * Unpublish assets
      */
     public function unpublish()
     {
-        $dir = public_path('extensions/'.$this->getName());
+        $dir = public_path('extensions/' . $this->getName());
 
         if (is_dir($dir)) {
             $this->app['files']->deleteDirectory($dir);
@@ -231,35 +251,19 @@ abstract class Extension extends ServiceProvider
     }
 
     /**
-     * Return the module name in a proper format for using in namespace/autoloading
+     * Register routes in the current namespace
      *
-     * @return string
+     * @param callable $callback
+     * @param string $prefix
      */
-    public function getFormatedName()
+    protected function routes(callable $callback, $prefix = '')
     {
-        return studly_case($this->getName());
-    }
-
-    /**
-     * Register namespace
-     *
-     * @return string
-     */
-    public function getNamespace()
-    {
-        return 'Extensions\\'.$this->getFormatedName().'\\';
-    }
-
-    /**
-     * Load extension data
-     */
-    protected function loadManifest()
-    {
-        if ($this->manifest) {
-            return;
-        }
-
-        $this->manifest = json_decode(file_get_contents($this->path.'/info.json'));
+        $this->router()
+            ->group([
+                'namespace' => $this->getNamespace() . 'Http\Controllers',
+                'prefix' => $prefix,
+                'middleware' => ['web', 'auth.admin'],
+            ], $callback);
     }
 
     /**
@@ -273,14 +277,23 @@ abstract class Extension extends ServiceProvider
     }
 
     /**
-     * Register routes in the current namespace
+     * Register namespace
      *
-     * @param callable $callback
-     * @param string $prefix
+     * @return string
      */
-    protected function routes(callable $callback, $prefix = '')
+    public function getNamespace()
     {
-        $this->router()->group(['namespace' => $this->getNamespace().'Http\Controllers', 'prefix' => $prefix], $callback);
+        return 'Extensions\\' . $this->getFormatedName() . '\\';
+    }
+
+    /**
+     * Return the module name in a proper format for using in namespace/autoloading
+     *
+     * @return string
+     */
+    public function getFormatedName()
+    {
+        return studly_case($this->getName());
     }
 
     /**

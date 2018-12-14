@@ -1,4 +1,5 @@
-<h3><span class="total-comments">{{ formatNumber($post->comments) }}</span> {{ __choice('comments', $post->comments) }}</h3>
+<h3><span class="total-comments">{{ formatNumber($post->comments) }}</span> {{ __choice('comments', $post->comments) }}
+</h3>
 <form action="{{ route('posts.comment', $post) }}" id="comment-form" method="post">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="form-group">
@@ -14,7 +15,8 @@
         @if (auth()->check())
             <button type="submit" class="btn btn-medium submit-btn">{{ title(__('post')) }}</button>
         @else
-            <button type="button" disabled class="btn btn-medium modal-trigger" data-target=".modal-log-in">{{ title(__('post')) }}</button>
+            <button type="button" disabled class="btn btn-medium modal-trigger"
+                    data-target=".modal-log-in">{{ title(__('post')) }}</button>
         @endif
     </div>
 </form>

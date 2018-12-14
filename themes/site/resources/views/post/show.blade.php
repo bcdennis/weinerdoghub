@@ -11,16 +11,16 @@
     <meta itemprop="description" content="{{ $post->title }}">
     <meta itemprop="image" content="{{ media($post->thumbnail) }}">
     <!-- Facebook -->
-    <meta property="og:title" content="{{ $post->title }}" />
-    <meta property="og:description" content="{{ $post->title }}" />
-    <meta property="og:url" content="{{ URL::current() }}" />
-    <meta property="og:image" content="{{ media($post->thumbnail ?: $post->featured) }}" />
-    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{ $post->title }}"/>
+    <meta property="og:description" content="{{ $post->title }}"/>
+    <meta property="og:url" content="{{ URL::current() }}"/>
+    <meta property="og:image" content="{{ media($post->thumbnail ?: $post->featured) }}"/>
+    <meta property="og:type" content="article"/>
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{ $post->title }}" />
-    <meta name="twitter:description" content="{{ $post->title }}" />
-    <meta name="twitter:image:src" content="{{ media($post->thumbnail ?: $post->featured) }}" />
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="{{ $post->title }}"/>
+    <meta name="twitter:description" content="{{ $post->title }}"/>
+    <meta name="twitter:image:src" content="{{ media($post->thumbnail ?: $post->featured) }}"/>
     <meta name="author" content="{{ $post->user->name }}">
 @stop
 
@@ -34,7 +34,8 @@
                     <span class="text-accent">{{ __choice('smiles', $post->points) }}</span> {{ __choice('points', $post->points) }}
                 </p>
                 <span class="divide-meta">.</span>
-                <p>{{ formatNumber($post->views) }} <span class="text-accent">{{ __choice('views', $post->views) }}</span></p>
+                <p>{{ formatNumber($post->views) }} <span
+                            class="text-accent">{{ __choice('views', $post->views) }}</span></p>
             </div>
 
             @if ( ! $post->safe && ( ! auth()->check() || ! auth()->user()->nsfw))
@@ -48,30 +49,30 @@
             </div>
 
             @if ($post->type == 'list')
-                </article>
+        </article>
 
-                @foreach ($post->items as $pos => $item)
-                    <article>
-                        <div class="list-item-heading">
-                            <span class="item-counter">{{ $pos + 1 }}</span>
-                            <h2 class="item-title">{{ $item->title }}</h2>
-                        </div>
-                        <div class="post-wrapper">
-                            @if ( ! $post->safe && ( ! auth()->check() || ! auth()->user()->nsfw))
-                                @include('site::partials.post.nsfw', ['post' => $item, 'isBig' => true])
-                            @else
-                                @include('site::partials.post.'.$item->type, ['post' => $item, 'isBig' => true])
-                            @endif
-                            <div class="post-description">
-                                {!! parseDescription($item->description) !!}
-                            </div>
-                        </div>
-                    </article>
-                    @if ($pos + 1 < count($post->items))
-                        <div class="divider"></div>
+        @foreach ($post->items as $pos => $item)
+            <article>
+                <div class="list-item-heading">
+                    <span class="item-counter">{{ $pos + 1 }}</span>
+                    <h2 class="item-title">{{ $item->title }}</h2>
+                </div>
+                <div class="post-wrapper">
+                    @if ( ! $post->safe && ( ! auth()->check() || ! auth()->user()->nsfw))
+                        @include('site::partials.post.nsfw', ['post' => $item, 'isBig' => true])
+                    @else
+                        @include('site::partials.post.'.$item->type, ['post' => $item, 'isBig' => true])
                     @endif
-                @endforeach
-                <article>
+                    <div class="post-description">
+                        {!! parseDescription($item->description) !!}
+                    </div>
+                </div>
+            </article>
+            @if ($pos + 1 < count($post->items))
+                <div class="divider"></div>
+            @endif
+        @endforeach
+        <article>
             @endif
 
             <div class="user-actions">
@@ -137,7 +138,8 @@
                     {{ __('Repost of another post on Smile') }}
                 </label>
             </div>
-            <button type="button" data-redirect="{{ route('post', $post->slug) }}" class="btn btn-full-width submit-report">
+            <button type="button" data-redirect="{{ route('post', $post->slug) }}"
+                    class="btn btn-full-width submit-report">
                 {{ title(__('report')) }}
             </button>
         </form>

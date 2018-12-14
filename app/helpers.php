@@ -2,7 +2,34 @@
 
 use Illuminate\Support\Str;
 
-if ( ! function_exists('utf8_strrev')) {
+/**
+ * Check if requirement passes
+ *
+ * @param $requirement
+ * @return string
+ */
+function passes($requirement)
+{
+    $class = $requirement['ok'] ? 'alert-success' : 'alert-danger';
+
+    return sprintf(' class="%s"', $class);
+}
+
+/**
+ * Set active acording to the route
+ *
+ * @param $name
+ * @return string
+ */
+function setStepActive($name)
+{
+    if (\Route::currentRouteName() == $name) {
+        return 'class="active"';
+    }
+    return '';
+}
+
+if (!function_exists('utf8_strrev')) {
     /**
      * Reverse a string regardless of the charset
      *
@@ -29,7 +56,7 @@ function assetTheme($resource, $theme = null)
 {
     $path = 'themes/' . ($theme ?: config('smile.theme'));
 
-    return asset($path.'/'.$resource);
+    return asset($path . '/' . $resource);
 }
 
 /**
@@ -56,7 +83,7 @@ function adminTheme($resource, $theme = null)
  */
 function themeView($view, array $data = [])
 {
-    return view(config('smile.theme').'::'.$view, $data);
+    return view(config('smile.theme') . '::' . $view, $data);
 }
 
 
@@ -71,28 +98,25 @@ function formatNumber($n)
     $value = $n;
     $unit = '';
 
-    if($n > 1000000000000) {
+    if ($n > 1000000000000) {
         $value = $n / 1000000000000;
         $unit = 'T';
-    }
-    else if($n > 1000000000) {
+    } else if ($n > 1000000000) {
         $value = $n / 1000000000;
         $unit = 'B';
-    }
-    else if($n > 1000000) {
+    } else if ($n > 1000000) {
         $value = $n / 1000000;
         $unit = 'M';
-    }
-    else if($n >= 10000) {
+    } else if ($n >= 10000) {
         $value = $n / 1000;
         $unit = 'K';
     }
 
-    if (((int) $value) == $value) {
-        return number_format($value).$unit;
+    if (((int)$value) == $value) {
+        return number_format($value) . $unit;
     }
 
-    return number_format($value, 1).$unit;
+    return number_format($value, 1) . $unit;
 }
 
 /**
@@ -108,7 +132,7 @@ function languages()
         return $langs;
     }
 
-    $languages = glob(base_path('themes/'.config('smile.theme').'/resources/lang/*'));
+    $languages = glob(base_path('themes/' . config('smile.theme') . '/resources/lang/*'));
 
     $langs = [];
 
@@ -161,7 +185,7 @@ function perm($is = null)
 
     $perm = $user ? $user->permission : 'guest';
 
-    if ( ! is_null($is)) {
+    if (!is_null($is)) {
         return $is == $perm;
     }
 
@@ -169,20 +193,22 @@ function perm($is = null)
 }
 
 
-/**
- * Translate current theme
- *
- * @param null $id
- * @param array $parameters
- * @param string $domain
- * @param null $locale
- * @return string
- */
-function __($id = null, $parameters = array(), $domain = 'messages', $locale = null)
-{
-    $theme = config('smile.theme');
+if (!function_exists('__')) {
+    /**
+     * Translate current theme
+     *
+     * @param null $id
+     * @param array $parameters
+     * @param string $domain
+     * @param null $locale
+     * @return string
+     */
+    function __($id = null, $parameters = array(), $domain = 'messages', $locale = null)
+    {
+        $theme = config('smile.theme');
 
-    return trans($theme.'::smile.'.$id, $parameters, $domain, $locale);
+        return trans($theme . '::smile.' . $id, $parameters, $domain, $locale);
+    }
 }
 
 /**
@@ -199,7 +225,7 @@ function __choice($id, $number, array $parameters = array(), $domain = 'messages
 {
     $theme = config('smile.theme');
 
-    return trans_choice($theme.'::smile.'.$id, $number, $parameters, $domain, $locale);
+    return trans_choice($theme . '::smile.' . $id, $number, $parameters, $domain, $locale);
 }
 
 /**
@@ -235,15 +261,3 @@ function upper($title)
     return Str::upper($title);
 }
 
-if ( ! function_exists('curl_reset')) {
-    /**
-     * Curl reset for php 5.4
-     *
-     * @param $ch
-     */
-    function curl_reset($ch)
-    {
-        curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        curl_setopt($ch, CURLOPT_POST, false);
-    }
-}

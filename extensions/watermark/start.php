@@ -3,7 +3,8 @@
 use Illuminate\Routing\Router;
 use Smile\Core\Extensions\Extension;
 
-class WatermarkExtension extends Extension {
+class WatermarkExtension extends Extension
+{
 
     public $settingsRoute = 'admin.extensions.watermark.settings';
 

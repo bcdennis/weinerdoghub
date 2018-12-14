@@ -2,44 +2,39 @@
 
 namespace Smile\Core\Extensions;
 
-use IonutMilica\LaravelSettings\SettingsContract;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
+use IonutMilica\LaravelSettings\SettingsContract;
 
 class Manager
 {
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var SettingsContract
-     */
-    private $settings;
-
-    /**
      * @var array
      */
     protected $extensions;
-
     /**
      * @var
      */
     protected $path;
-
     /**
      * @var Application
      */
     protected $app;
-
     /**
      * PSR4 loader
      *
      * @var mixed
      */
     protected $loader;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+    /**
+     * @var SettingsContract
+     */
+    private $settings;
 
     /**
      * @param Filesystem $filesystem
@@ -70,7 +65,7 @@ class Manager
             $name = basename($extension);
             $class = $this->extensionClass($name);
 
-            $this->filesystem->getRequire($extension.'/start.php');
+            $this->filesystem->getRequire($extension . '/start.php');
             $extensionInstance = new $class($this->app, $extension, $name);
 
             if (in_array($name, $this->settings->get('extensions.activated', []))) {
@@ -86,6 +81,17 @@ class Manager
     }
 
     /**
+     * Change extension name to valid class
+     *
+     * @param $name
+     * @return mixed
+     */
+    protected function extensionClass($name)
+    {
+        return studly_case($name . '-extension');
+    }
+
+    /**
      * Get extension by name
      *
      * @param $name
@@ -93,7 +99,7 @@ class Manager
      */
     public function findByName($name)
     {
-        return $this->extensions->first(function ($idx, Extension $item) use ($name) {
+        return $this->extensions->first(function (Extension $item) use ($name) {
             return $item->getName() == $name;
         });
     }
@@ -107,6 +113,18 @@ class Manager
             $this->loader->setPsr4($module->getNamespace(), $module->getSourcePath());
             $module->register();
         }
+    }
+
+    /**
+     * Get installed modules
+     *
+     * @return Collection|Extension[]
+     */
+    public function installed()
+    {
+        return $this->extensions->filter(function (Extension $item) {
+            return $item->isInstalled();
+        });
     }
 
     /**
@@ -131,18 +149,6 @@ class Manager
     {
         return $this->extensions->filter(function (Extension $item) {
             return $item->isActive();
-        });
-    }
-
-    /**
-     * Get installed modules
-     *
-     * @return Collection|Extension[]
-     */
-    public function installed()
-    {
-        return $this->extensions->filter(function (Extension $item) {
-            return $item->isInstalled();
         });
     }
 
@@ -206,6 +212,7 @@ class Manager
 
         $this->settings->set('extensions.installed', $extensions);
     }
+
     /**
      * Uninstall extension
      *
@@ -228,17 +235,6 @@ class Manager
 
         $this->settings->set('extensions.installed', $extensions);
         $this->settings->set('extensions.activated', $extensions);
-    }
-
-    /**
-     * Change extension name to valid class
-     *
-     * @param $name
-     * @return mixed
-     */
-    protected function extensionClass($name)
-    {
-        return studly_case($name.'-extension');
     }
 
 }

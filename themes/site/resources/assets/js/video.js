@@ -15,7 +15,7 @@ class Video {
         var wrapper = $(this),
             video = wrapper.find('video')[0];
 
-        if ( ! video.paused) {
+        if (!video.paused) {
             video.pause();
             wrapper.addClass('gif');
         } else {

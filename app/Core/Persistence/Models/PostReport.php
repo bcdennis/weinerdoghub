@@ -35,9 +35,9 @@ class PostReport extends Model
 
         $reports = $this->newInstance();
         $reports = $reports->where('post_id', $this->attributes['post_id'])
-                         ->where('reason', $this->attributes['reason'])
-                         ->where('id', '!=', $this->attributes['id'])
-                         ->count();
+            ->where('reason', $this->attributes['reason'])
+            ->where('id', '!=', $this->attributes['id'])
+            ->count();
 
         $this->attributes['other'] = $reports;
 

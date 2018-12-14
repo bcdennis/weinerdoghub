@@ -2,13 +2,14 @@
 
 namespace Smile\Events\User;
 
-use Smile\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Smile\Core\Persistence\Models\User;
+use Smile\Events\Event;
 
-class UserWasConfirmed extends Event {
+class UserWasConfirmed extends Event
+{
 
-	use SerializesModels;
+    use SerializesModels;
 
     /**
      * @var User

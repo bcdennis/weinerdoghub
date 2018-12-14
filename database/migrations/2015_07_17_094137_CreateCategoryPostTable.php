@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoryPostTable extends Migration {
+class CreateCategoryPostTable extends Migration
+{
 
     /**
      * Run the migrations.
@@ -19,11 +20,11 @@ class CreateCategoryPostTable extends Migration {
             $table->integer('category_id')->unsigned();
 
             $table->foreign('post_id')
-                  ->references('id')->on('posts')
-                  ->onDelete('cascade');
+                ->references('id')->on('posts')
+                ->onDelete('cascade');
             $table->foreign('category_id')
-                  ->references('id')->on('categories')
-                  ->onDelete('cascade');
+                ->references('id')->on('categories')
+                ->onDelete('cascade');
         });
     }
 

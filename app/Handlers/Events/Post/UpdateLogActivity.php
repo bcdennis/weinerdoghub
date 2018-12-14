@@ -1,14 +1,12 @@
 <?php namespace Smile\Handlers\Events\Post;
 
-use Smile\Events\Post\PostWasAccepted;
-
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
-use Smile\Core\Persistence\Repositories\ActivityContract;
 use Smile\Core\Persistence\Repositories\PostContract;
 use Smile\Core\Persistence\Repositories\UserContract;
+use Smile\Events\Post\PostWasAccepted;
 
-class UpdateLogActivity {
+class UpdateLogActivity
+{
 
     /**
      * @var UserContract
@@ -34,7 +32,7 @@ class UpdateLogActivity {
     /**
      * Handle the event.
      *
-     * @param  PostWasAccepted  $event
+     * @param  PostWasAccepted $event
      * @return void
      */
     public function handle(PostWasAccepted $event)

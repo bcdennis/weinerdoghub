@@ -20,17 +20,6 @@ function userStatus($user)
 }
 
 /**
- * Admin paginator
- *
- * @param $paginator
- * @return \Themes\Admin\Presenters\PaginationPresenter
- */
-function paginator($paginator)
-{
-    return (new \Themes\Admin\Presenters\PaginationPresenter($paginator))->render();
-}
-
-/**
  * Calculate growth rate
  *
  * @param $val1

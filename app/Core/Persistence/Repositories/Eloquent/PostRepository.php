@@ -4,9 +4,9 @@ namespace Smile\Core\Persistence\Repositories\Eloquent;
 
 use Carbon\Carbon;
 use Smile\Core\Persistence\Models\Category;
+use Smile\Core\Persistence\Models\Post;
 use Smile\Core\Persistence\Models\User;
 use Smile\Core\Persistence\Repositories\PostContract;
-use Smile\Core\Persistence\Models\Post;
 
 class PostRepository extends BaseRepository implements PostContract
 {
@@ -160,8 +160,8 @@ class PostRepository extends BaseRepository implements PostContract
 
         if ($category->template == 'video') {
             $posts->whereIn('type', ['youtube', 'vimeo', 'facebook', 'dmotion'])
-                            ->orderBy('pinned', 'desc')
-                            ->orderBy('id', 'desc');
+                ->orderBy('pinned', 'desc')
+                ->orderBy('id', 'desc');
         }
 
         if ($category->template == 'vine') {
@@ -237,7 +237,7 @@ class PostRepository extends BaseRepository implements PostContract
     {
         $posts = $this->model->where('accepted', true)->random()->limit($limit);
 
-        if ( ! $user || ! $user->nsfw) {
+        if (!$user || !$user->nsfw) {
             $posts->where('safe', 1);
         }
         $posts->where('parent_id', null);
@@ -255,7 +255,7 @@ class PostRepository extends BaseRepository implements PostContract
     {
         $posts = $this->model->where('accepted', true)->random()->limit(1);
 
-        if ( ! $user || ! $user->nsfw) {
+        if (!$user || !$user->nsfw) {
             $posts->where('safe', 1);
         }
         $posts->where('parent_id', null);
@@ -273,7 +273,7 @@ class PostRepository extends BaseRepository implements PostContract
     public function search($query = null, $perPage = 10)
     {
         $search = $this->model->with(['categories', 'user'])
-            ->where('title', 'like', '%'.$this->escape($query).'%')
+            ->where('title', 'like', '%' . $this->escape($query) . '%')
             ->where('accepted', true)
             ->where('parent_id', null);
 
@@ -290,7 +290,7 @@ class PostRepository extends BaseRepository implements PostContract
     public function hold($query = null, $perPage = 10)
     {
         $search = $this->model->with(['categories', 'user'])
-            ->where('title', 'like', '%'.$this->escape($query).'%')
+            ->where('title', 'like', '%' . $this->escape($query) . '%')
             ->where('accepted', false)
             ->where('parent_id', null);
 
@@ -348,10 +348,10 @@ class PostRepository extends BaseRepository implements PostContract
     public function next(Post $post)
     {
         return $this->model->where('id', '<', $post->id)
-                        ->where('accepted', true)
-                        ->where('parent_id', null)
-                        ->orderBy('id', 'desc')
-                        ->first();
+            ->where('accepted', true)
+            ->where('parent_id', null)
+            ->orderBy('id', 'desc')
+            ->first();
     }
 
 }

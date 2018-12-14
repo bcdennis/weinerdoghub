@@ -9,7 +9,7 @@ class BridgeServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        if (php_sapi_name() == 'cli' || ! INSTALLED) {
+        if (php_sapi_name() == 'cli' || !INSTALLED) {
             return;
         }
 
@@ -27,22 +27,6 @@ class BridgeServiceProvider extends ServiceProvider
         $this->app->setLocale(setting('language', 'en'));
     }
 
-    protected function email()
-    {
-        if ( ! setting('email.driver')) {
-            return;
-        }
-
-        $this->app['config']['mail.driver'] = setting('email.driver', 'mail');
-        $this->app['config']['mail.host'] = setting('email.host');
-        $this->app['config']['mail.encryption'] = setting('email.encryption', 'ssl');
-        $this->app['config']['mail.username'] = setting('email.user');
-        $this->app['config']['mail.password'] = setting('email.pass');
-        $this->app['config']['mail.port'] = setting('email.port');
-        $this->app['config']['mail.from.address'] = setting('email.sender-email');
-        $this->app['config']['mail.from.name'] = setting('email.sender-name');
-    }
-
     /**
      * Overwrite captcha package settings
      */
@@ -57,6 +41,22 @@ class BridgeServiceProvider extends ServiceProvider
         }
     }
 
+    protected function email()
+    {
+        if (!setting('email.driver')) {
+            return;
+        }
+
+        $this->app['config']['mail.driver'] = setting('email.driver', 'mail');
+        $this->app['config']['mail.host'] = setting('email.host');
+        $this->app['config']['mail.encryption'] = setting('email.encryption', 'ssl');
+        $this->app['config']['mail.username'] = setting('email.user');
+        $this->app['config']['mail.password'] = setting('email.pass');
+        $this->app['config']['mail.port'] = setting('email.port');
+        $this->app['config']['mail.from.address'] = setting('email.sender-email');
+        $this->app['config']['mail.from.name'] = setting('email.sender-name');
+    }
+
     protected function check()
     {
         $this->app['Smile\Core\Updater\Manager']->validate();
@@ -69,7 +69,7 @@ class BridgeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (php_sapi_name() == 'cli' || ! INSTALLED) {
+        if (php_sapi_name() == 'cli' || !INSTALLED) {
             return;
         }
     }

@@ -14,7 +14,7 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['router']->group(['namespace' => 'Themes\Admin\Http\Controllers', 'prefix' => 'admin'], function ($router) {
+        $this->app['router']->group(['namespace' => 'Themes\Admin\Http\Controllers', 'prefix' => 'admin', 'middleware' => ['web']], function ($router) {
             require __DIR__.'/Http/routes.php';
         });
         require __DIR__.'/helpers.php';

@@ -28,21 +28,6 @@ abstract class BaseEmbedder
     }
 
     /**
-     * Regex needed for embedding detection
-     *
-     * @return mixed
-     */
-    public abstract function regex();
-
-    /**
-     * Find thumbnail for the video
-     *
-     * @param array $data
-     * @return mixed
-     */
-    protected abstract function embed(array& $data);
-
-    /**
      * Check if link is embeddable
      *
      * @param $url
@@ -50,8 +35,15 @@ abstract class BaseEmbedder
      */
     public function canEmbed($url)
     {
-        return preg_match('#'.$this->regex().'#', $url, $this->out);
+        return preg_match('#' . $this->regex() . '#', $url, $this->out);
     }
+
+    /**
+     * Regex needed for embedding detection
+     *
+     * @return mixed
+     */
+    public abstract function regex();
 
     /**
      * Process video embed
@@ -59,7 +51,7 @@ abstract class BaseEmbedder
      * @param array $data
      * @return array
      */
-    public function process(array& $data)
+    public function process(array & $data)
     {
         $url = $this->embed($data);
 
@@ -67,5 +59,13 @@ abstract class BaseEmbedder
 
         return $data;
     }
+
+    /**
+     * Find thumbnail for the video
+     *
+     * @param array $data
+     * @return mixed
+     */
+    protected abstract function embed(array & $data);
 
 }

@@ -15,7 +15,7 @@ function voteButton($model, $type, $user = null)
     } else {
         $url = route('posts.vote', $model->id);
     }
-    $active =  '';
+    $active = '';
 
     if ($model->votes->count() > 0 && $active !== null) {
         if ($type == 'like' && $model->votes[0]->value == 1) {
@@ -26,10 +26,10 @@ function voteButton($model, $type, $user = null)
         }
     }
 
-    $target = ! $user ? 'data-target=".modal-log-in"' : '';
-    $active = ! $user ? $active.' modal-trigger' : $active;
+    $target = !$user ? 'data-target=".modal-log-in"' : '';
+    $active = !$user ? $active . ' modal-trigger' : $active;
 
-    return sprintf('<button data-url="%s" %s class="%s %s"></button>', $url, $target ,$type, $active);
+    return sprintf('<button data-url="%s" %s class="%s %s"></button>', $url, $target, $type, $active);
 }
 
 /**
@@ -100,7 +100,7 @@ function avatar($url)
         return $url;
     }
 
-    return $url ?  media($url) : assetTheme('assets/img/default.png');
+    return $url ? media($url) : assetTheme('assets/img/default.png');
 }
 
 /**
@@ -157,7 +157,7 @@ function parseDescription($description)
 
     foreach ($paragraphs as $paragraph) {
         if (trim($paragraph)) {
-            $html .= '<p>'.$paragraph.'</p>';
+            $html .= '<p>' . $paragraph . '</p>';
         }
     }
 

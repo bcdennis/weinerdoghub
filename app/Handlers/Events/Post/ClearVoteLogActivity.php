@@ -2,15 +2,14 @@
 
 namespace Smile\Handlers\Events\Post;
 
-use Smile\Events\Post\PostWasUnvoted;
-
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
 use Smile\Core\Persistence\Repositories\ActivityContract;
 use Smile\Core\Persistence\Repositories\PostContract;
 use Smile\Core\Persistence\Repositories\UserContract;
+use Smile\Events\Post\PostWasUnvoted;
 
-class ClearVoteLogActivity {
+class ClearVoteLogActivity
+{
 
     /**
      * @var ActivityContract
@@ -32,23 +31,23 @@ class ClearVoteLogActivity {
      * @param UserContract $user
      * @param PostContract $post
      */
-	public function __construct(ActivityContract $activity,
+    public function __construct(ActivityContract $activity,
                                 UserContract $user,
                                 PostContract $post)
-	{
+    {
         $this->activity = $activity;
         $this->user = $user;
         $this->post = $post;
     }
 
-	/**
-	 * Handle the event.
-	 *
-	 * @param  PostWasUnvoted  $event
-	 * @return void
-	 */
-	public function handle(PostWasUnvoted $event)
-	{
+    /**
+     * Handle the event.
+     *
+     * @param  PostWasUnvoted $event
+     * @return void
+     */
+    public function handle(PostWasUnvoted $event)
+    {
         $eventName = $event->value == 1 ? 'post.vote.like' : 'post.vote.dislike';
 
         $this->activity->deleteByComposite($event->user, $event->post, $eventName);
@@ -60,6 +59,6 @@ class ClearVoteLogActivity {
             'likes' => $likes,
             'dislikes' => $dislikes,
         ]);
-	}
+    }
 
 }

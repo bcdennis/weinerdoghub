@@ -26,7 +26,7 @@ function extensions($name = null)
  */
 function assetExtension($asset, $extension)
 {
-    return asset('extensions/'.$extension.'/'.$asset);
+    return asset('extensions/' . $extension . '/' . $asset);
 }
 
 /**

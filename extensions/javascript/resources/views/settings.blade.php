@@ -3,16 +3,21 @@
 @section('css')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/codemirror.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/hint/show-hint.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/hint/show-hint.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/theme/monokai.min.css"/>
 @stop
 
 @section('js')
     @parent
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/codemirror.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/mode/javascript/javascript.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/hint/show-hint.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/edit/matchbrackets.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/codemirror.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/mode/javascript/javascript.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/hint/show-hint.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/edit/matchbrackets.min.js"></script>
     <script>
         var editor = CodeMirror.fromTextArea(document.getElementById("javascript"), {
             extraKeys: {"Ctrl-Space": "autocomplete"},
@@ -35,7 +40,8 @@
                     <div class="row m-b-lg">
                         <div class="col-md-12">
                             <p>
-                                With this module you can your own javascript code to your app allowing you to make changes
+                                With this module you can your own javascript code to your app allowing you to make
+                                changes
                                 without editing the files.
                             </p>
                         </div>
@@ -43,11 +49,14 @@
                     <div class="row m-b-lg">
                         <div class="col-md-12 border-right">
                             <h2>Javascript code</h2>
-                            <form class="m-b-lg" role="form" method="post" action="{{ route('admin.extensions.javascript.settings') }}">
+                            <form class="m-b-lg" role="form" method="post"
+                                  action="{{ route('admin.extensions.javascript.settings') }}">
                                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                                 <div class="form-group">
-                                    <label for="javascript">Bad code may produce errors. Check the browser console after!</label>
-                                    <textarea name="javascript" id="javascript" rows="15" class="form-control">{{ setting('javascript', '') }}</textarea>
+                                    <label for="javascript">Bad code may produce errors. Check the browser console
+                                        after!</label>
+                                    <textarea name="javascript" id="javascript" rows="15"
+                                              class="form-control">{{ setting('javascript', '') }}</textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-normal">Save</button>

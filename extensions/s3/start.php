@@ -3,7 +3,8 @@
 use Illuminate\Routing\Router;
 use Smile\Core\Extensions\Extension;
 
-class S3Extension extends Extension {
+class S3Extension extends Extension
+{
 
     public $settingsRoute = 'admin.extensions.s3.settings';
 

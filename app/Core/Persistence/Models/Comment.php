@@ -68,6 +68,7 @@ class Comment extends Model
     {
         return $this->belongsTo('Smile\Core\Persistence\Models\Comment', 'parent_id');
     }
+
     /**
      * Children comments
      *
@@ -76,7 +77,7 @@ class Comment extends Model
     public function children()
     {
         return $this->hasMany('Smile\Core\Persistence\Models\Comment', 'parent_id')
-                    ->orderBy('id', 'desc');
+            ->orderBy('id', 'desc');
     }
 
 }

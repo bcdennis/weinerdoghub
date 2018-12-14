@@ -1,4 +1,5 @@
 <?php
+
 namespace Smile\Core\Contracts\Embed;
 
 use Smile\Core\Embed\BaseEmbedder;

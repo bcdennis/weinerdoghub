@@ -46,13 +46,13 @@ class CommentReportRepository extends BaseRepository implements CommentReportCon
     public function all($q = null, $perPage = 10)
     {
         $reports = $this->model->with(['comment.post.user', 'user'])
-          ->orderBy('id', 'desc')
-          ->groupBy('comment_id')
-          ->whereHas('comment', function ($query) use ($q) {
-              if ($q) {
-                  $query->where('message', 'like', '%'.$this->escape($q).'%');
-              }
-          });
+            ->orderBy('id', 'desc')
+            ->groupBy('comment_id')
+            ->whereHas('comment', function ($query) use ($q) {
+                if ($q) {
+                    $query->where('message', 'like', '%' . $this->escape($q) . '%');
+                }
+            });
 
         return $reports->paginate($perPage);
     }
@@ -67,8 +67,8 @@ class CommentReportRepository extends BaseRepository implements CommentReportCon
     public function findByUserAndComment(User $user, Comment $comment)
     {
         return $this->model->where('user_id', $user->id)
-                           ->where('comment_id', $comment->id)
-                           ->first();
+            ->where('comment_id', $comment->id)
+            ->first();
     }
 
     /**

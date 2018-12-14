@@ -7,7 +7,8 @@ use Smile\Core\Providers\SmileServiceProvider;
 use Smile\Core\Providers\StartServiceProvider;
 use Smile\Core\Themes\ThemeServiceProvider;
 
-class AppServiceProvider extends ServiceProvider {
+class AppServiceProvider extends ServiceProvider
+{
 
     /**
      * Register any application services.
@@ -22,12 +23,12 @@ class AppServiceProvider extends ServiceProvider {
     {
         $this->app->register(new StartServiceProvider($this->app));
         $this->app->register(new SmileServiceProvider($this->app));
-        $this->app->register(new BusServiceProvider($this->app));
         $this->app->register(new EventServiceProvider($this->app));
         $this->app->register(new RouteServiceProvider($this->app));
 
         $this->app->register(new ExtensionsServiceProvider($this->app));
         $this->app->register(new BridgeServiceProvider($this->app));
+
         $this->app->register(new ThemeServiceProvider($this->app));
     }
 }

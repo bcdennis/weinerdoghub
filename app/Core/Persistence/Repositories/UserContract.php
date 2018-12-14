@@ -6,21 +6,21 @@ use Smile\Core\Persistence\Models\User;
 
 interface UserContract
 {
-	/**
-	 * Find user by his email
-	 *
-	 * @param $email
-	 * @return mixed
-	 */
-	public function findByEmail($email);
+    /**
+     * Find user by his email
+     *
+     * @param $email
+     * @return mixed
+     */
+    public function findByEmail($email);
 
-	/**
-	 * Find user by its name
-	 *
-	 * @param $name
-	 * @return mixed
-	 */
-	public function findByName($name);
+    /**
+     * Find user by its name
+     *
+     * @param $name
+     * @return mixed
+     */
+    public function findByName($name);
 
     /**
      * @param $email
@@ -37,31 +37,31 @@ interface UserContract
      */
     public function findById($id);
 
-	/**
-	 * Creates a new user
-	 *
-	 * @param $data
-	 * @return User
-	 */
-	public function create($data);
+    /**
+     * Creates a new user
+     *
+     * @param $data
+     * @return User
+     */
+    public function create($data);
 
     /**
-	 * Updates an user
-	 *
-	 * @param User $user
-	 * @param array $data
-	 * @return User
-	 */
-	public function update(User $user, array $data);
+     * Updates an user
+     *
+     * @param User $user
+     * @param array $data
+     * @return User
+     */
+    public function update(User $user, array $data);
 
-	/**
-	 * Deletes a user by model
-	 *
-	 * @param User $user
-	 * @return bool|null
-	 * @throws \Exception
-	 */
-	public function delete(User $user);
+    /**
+     * Deletes a user by model
+     *
+     * @param User $user
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function delete(User $user);
 
     /**
      * Search for users

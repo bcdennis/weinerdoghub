@@ -1,9 +1,10 @@
 <?php namespace Smile\Handlers\Events\Post;
 
-use Smile\Events\Post\PostWasVoted;
 use Smile\Core\Persistence\Repositories\NotificationContract;
+use Smile\Events\Post\PostWasVoted;
 
-class VoteNotification {
+class VoteNotification
+{
     /**
      * @var NotificationContract
      */
@@ -22,7 +23,7 @@ class VoteNotification {
     /**
      * Handle the event.
      *
-     * @param  PostWasVoted  $event
+     * @param  PostWasVoted $event
      * @return void
      */
     public function handle(PostWasVoted $event)

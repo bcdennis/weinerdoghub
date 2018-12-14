@@ -6,9 +6,9 @@ use Illuminate\Contracts\Auth\Guard;
 use Laravel\Socialite\Contracts\Factory;
 use Laravel\Socialite\SocialiteManager;
 use Smile\Core\Contracts\Image\UploaderContract;
-use Smile\Events\User\UserCreatedThroughOAuth;
 use Smile\Core\Persistence\Repositories\OAuthIdentityContract;
 use Smile\Core\Persistence\Repositories\UserContract;
+use Smile\Events\User\UserCreatedThroughOAuth;
 
 class OAuth
 {
@@ -74,7 +74,7 @@ class OAuth
     {
         $socialUser = $this->social->with($provider)->stateless()->user();
 
-        if ( ! $socialUser) {
+        if (!$socialUser) {
             return false;
         }
 
@@ -89,7 +89,7 @@ class OAuth
         $user = $this->user->findByEmail($socialUser->email);
 
         // User exists, we just attach provider info to it
-        if ( ! is_null($user)) {
+        if (!is_null($user)) {
             $this->oauth->create([
                 'provider_id' => $socialUser->id,
                 'provider' => $provider,
@@ -98,7 +98,7 @@ class OAuth
             ]);
 
             $this->user->update($user, ['status' => 1]);
-            if ( ! $this->user->block) {
+            if (!$this->user->block) {
                 $this->auth->login($user, true);
                 return true;
             }
@@ -107,7 +107,7 @@ class OAuth
 
         // User creation
 
-        if ( ! setting('registration', true)) {
+        if (!setting('registration', true)) {
             return false;
         }
 
@@ -117,7 +117,7 @@ class OAuth
             'email' => $socialUser->email,
             'password' => '',
             'status' => 1,
-            'avatar'  => $socialUser->avatar,
+            'avatar' => $socialUser->avatar,
         ]);
 
         event(new UserCreatedThroughOAuth($newUser));
@@ -146,7 +146,7 @@ class OAuth
         $name = preg_replace('/[^A-Za-z0-9]/', '', $email);
 
         do {
-            if ( ! $this->user->findByName($name)) break;
+            if (!$this->user->findByName($name)) break;
             $nameRev = mb_strrev($name);
 
             $number = 1;
@@ -156,8 +156,8 @@ class OAuth
                 $number = $out[1] + 1;
             }
 
-            $name = $name.$number;
-        } while(1);
+            $name = $name . $number;
+        } while (1);
 
         return $name;
     }

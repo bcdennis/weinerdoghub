@@ -11,7 +11,7 @@
 function resetForm(form) {
     var captcha = form.find('.g-recaptcha').length;
 
-    if(captcha) {
+    if (captcha) {
         grecaptcha.reset();
     }
 
@@ -27,9 +27,9 @@ function resetForm(form) {
  */
 function addErrors(form, data) {
     $.each(data, function (idx, item) {
-        var div = form.find('.'+idx);
+        var div = form.find('.' + idx);
         div.addClass('has-error');
-        div.append('<span class="text-error">'+item+'</span>');
+        div.append('<span class="text-error">' + item + '</span>');
     });
 }
 
@@ -40,9 +40,9 @@ function addErrors(form, data) {
 $('#login-form').on('click', 'button', function (event) {
     event.preventDefault();
 
-    var form = $( "#login-form" );
+    var form = $("#login-form");
 
-    $.post( form.attr('action'), form.serialize())
+    $.post(form.attr('action'), form.serialize())
         .done(function (data) {
             window.location.href = $('meta[name="root"]').attr('content');
         })
@@ -57,7 +57,7 @@ $('#login-form').on('click', 'button', function (event) {
 $('#register-form').on('click', 'button', function (event) {
     event.preventDefault();
 
-    var form = $( "#register-form" );
+    var form = $("#register-form");
 
     $.post(form.attr('action'), form.serialize())
         .done(function (data) {
@@ -74,7 +74,7 @@ $('#register-form').on('click', 'button', function (event) {
 $('.btn-edit-post').on('click', function (ev) {
     var btn = $(this);
 
-    $.get(btn.data('info')).done(function(data) {
+    $.get(btn.data('info')).done(function (data) {
         var form = $('#edit-post-form');
         form.attr('action', btn.data('edit'));
         $('#edit-title').val(data.title);
@@ -85,7 +85,7 @@ $('.btn-edit-post').on('click', function (ev) {
         $.each(data.categories, function (idx, item) {
             if (item.template == '' || item.template == 'nsfw') {
                 categories += item.slug + ",";
-                $('.c-'+item.id).attr('checked', true);
+                $('.c-' + item.id).attr('checked', true);
             }
         });
         $('.cts').text(categories);
@@ -100,7 +100,7 @@ $('#edit-post-form').on('click', 'button', function (event) {
 
     var btn = $(this), form = $('#edit-post-form');
 
-    if ( ! btn.hasClass('loading')) {
+    if (!btn.hasClass('loading')) {
         btn.addClass('loading');
         $.post(form.attr('action'), form.serialize())
             .done(function (data) {
@@ -119,7 +119,7 @@ $('#edit-post-form').on('click', 'button', function (event) {
 $('#file-upload-form').on('click', 'button', function (event) {
     event.preventDefault();
 
-    var formData, btn = $(this), form = $( "#file-upload-form" )[0], $this = $(form);
+    var formData, btn = $(this), form = $("#file-upload-form")[0], $this = $(form);
 
     if (typeof(FormData) == 'undefined') {
         formData = new FormDataCompatibility(form);
@@ -129,7 +129,7 @@ $('#file-upload-form').on('click', 'button', function (event) {
 
     form = $(form);
 
-    if ( ! btn.hasClass('loading')) {
+    if (!btn.hasClass('loading')) {
         btn.addClass('loading');
         $.ajax({
             url: $this.attr('action'),
@@ -153,7 +153,7 @@ $('#list-upload-form').on('click', 'button.make-list', function (event) {
     event.preventDefault();
 
     var formData, btn = $(this),
-        form = $( "#list-upload-form" )[0],
+        form = $("#list-upload-form")[0],
         $this = $(form);
 
     if (typeof(FormData) == 'undefined') {
@@ -164,7 +164,7 @@ $('#list-upload-form').on('click', 'button.make-list', function (event) {
 
     form = $(form);
 
-    if ( ! btn.hasClass('loading')) {
+    if (!btn.hasClass('loading')) {
         btn.addClass('loading');
         $.ajax({
             url: $this.attr('action'),
@@ -188,12 +188,12 @@ $('#list-upload-form').on('click', 'button.make-list', function (event) {
                     var itemId = idx[1],
                         itemField = idx[2],
                         listItem = $(items[itemId]);
-                    div = listItem.find('.'+itemField);
+                    div = listItem.find('.' + itemField);
                 } else {
-                    div = form.find('.list-form .'+idx);
+                    div = form.find('.list-form .' + idx);
                 }
                 div.addClass('has-error');
-                div.append('<span class="text-error">'+item+'</span>');
+                div.append('<span class="text-error">' + item + '</span>');
             });
 
         });
@@ -207,7 +207,7 @@ $('#url-upload-form').on('click', 'button', function (event) {
 
     var btn = $(this), form = $('#url-upload-form');
 
-    if ( ! btn.hasClass('loading')) {
+    if (!btn.hasClass('loading')) {
         btn.addClass('loading');
         $.post(form.attr('action'), form.serialize())
             .done(function (data) {
@@ -224,7 +224,7 @@ $('#url-upload-form').on('click', 'button', function (event) {
 });
 
 function like(container) {
-    $('.'+container).on('click', '.like', function (event) {
+    $('.' + container).on('click', '.like', function (event) {
         event.preventDefault();
 
         var btn = $(this);
@@ -232,7 +232,7 @@ function like(container) {
         $.post(btn.data('url'), {value: 1})
             .done(function (data) {
                 var closestDiv = btn.closest('div');
-                $('.'+container).find('.smiles-number-'+data.id).text(data.points);
+                $('.' + container).find('.smiles-number-' + data.id).text(data.points);
                 btn.toggleClass('active');
                 $(closestDiv.find('button.dislike')).removeClass('active');
             })
@@ -243,9 +243,8 @@ function like(container) {
     });
 }
 
-function dislike(container)
-{
-    $('.'+container).on('click', '.dislike', function (event) {
+function dislike(container) {
+    $('.' + container).on('click', '.dislike', function (event) {
         event.preventDefault();
 
         var btn = $(this);
@@ -253,7 +252,7 @@ function dislike(container)
         $.post(btn.data('url'), {value: -1})
             .done(function (data) {
                 var closestDiv = btn.closest('div');
-                $('.'+container).find('.smiles-number-'+data.id).text(data.points);
+                $('.' + container).find('.smiles-number-' + data.id).text(data.points);
                 btn.toggleClass('active');
                 $(closestDiv.find('button.like')).removeClass('active');
             });
@@ -295,7 +294,7 @@ var replyHandler = function (e) {
     var cancelStr = $('meta[name="lang.cancel"]').attr('content');
     var thisComment = $this.closest('.comment'),
         replyWrapper = $('<div class="comment reply-form"></div>'),
-        cancelBtn = $('<button type="button" class="btn btn-text btn-cancel">'+cancelStr+'</button>');
+        cancelBtn = $('<button type="button" class="btn btn-text btn-cancel">' + cancelStr + '</button>');
     replyForm = $('.comments-wrapper').find('form').first().clone();
 
     var parent_id = $this.data('parent'),
@@ -303,18 +302,18 @@ var replyHandler = function (e) {
 
     $this.prop('disabled', true);
 
-    if(thisComment.hasClass('reply-comment')) {
+    if (thisComment.hasClass('reply-comment')) {
         $(replyWrapper).addClass('reply-comment');
     }
 
-    replyForm.prepend($('<input type="hidden" name="parent_id" value="'+parent_id+'">'));
-    replyForm.attr('id', 'comment-form-'+parent_id+'-'+id);
+    replyForm.prepend($('<input type="hidden" name="parent_id" value="' + parent_id + '">'));
+    replyForm.attr('id', 'comment-form-' + parent_id + '-' + id);
     replyForm.find('.right').prepend(cancelBtn);
-    replyForm.find('textarea').val('@'+$this.data('name')+' ');
+    replyForm.find('textarea').val('@' + $this.data('name') + ' ');
 
     thisComment.after(replyWrapper.append(replyForm));
 
-    var parentForm = $('#comment-form-'+parent_id+'-'+id);
+    var parentForm = $('#comment-form-' + parent_id + '-' + id);
 
     parentForm.find('.submit-btn').on('click', function (e) {
         e.preventDefault();
@@ -332,7 +331,7 @@ var replyHandler = function (e) {
             });
     });
 
-    $('.btn-cancel').on('click', function(e) {
+    $('.btn-cancel').on('click', function (e) {
         e.preventDefault();
 
         $(this).closest('.comment').remove();
@@ -370,7 +369,8 @@ $('#delete-account-form').on('click', 'button', function (e) {
 
     $.post(form.attr('action'), form.serialize())
         .done(function (data) {
-            window.location.href = $('meta[name="root"]').attr('content');;
+            window.location.href = $('meta[name="root"]').attr('content');
+            ;
         })
         .fail(function ($xhr) {
             var input = $('#delete-account-form').find('input');
@@ -379,14 +379,14 @@ $('#delete-account-form').on('click', 'button', function (e) {
         });
 });
 
-$(window).load(function() {
+$(window).load(function () {
 
     like('comments');
     dislike('comments');
 
     var comments = $('.comments');
 
-    comments.on('click','.report', function (ev) {
+    comments.on('click', '.report', function (ev) {
         ev.preventDefault();
 
         var $this = $(this);
@@ -394,32 +394,32 @@ $(window).load(function() {
         $.post($this.data('url')).done(function () {
             var comment;
             if ($this.data('type') == 'parent') {
-                var parentStr = 'parent_'+$this.data('id');
-                comment = $('#block_'+parentStr);
-                $('#'+parentStr).remove();
+                var parentStr = 'parent_' + $this.data('id');
+                comment = $('#block_' + parentStr);
+                $('#' + parentStr).remove();
                 comment.remove();
                 decrementTotalComments();
             } else {
-                comment = $('#comment-'+$this.data('id'));
+                comment = $('#comment-' + $this.data('id'));
                 comment.remove();
             }
         });
     });
 
-    comments.on('click','.delete', function (ev) {
+    comments.on('click', '.delete', function (ev) {
         ev.preventDefault();
         var $this = $(this);
 
         $.post($this.data('url')).done(function () {
             var comment;
             if ($this.data('type') == 'parent') {
-                var parentStr = 'parent_'+$this.data('id');
-                comment = $('#block_'+parentStr);
-                $('#'+parentStr).remove();
+                var parentStr = 'parent_' + $this.data('id');
+                comment = $('#block_' + parentStr);
+                $('#' + parentStr).remove();
                 comment.remove();
                 decrementTotalComments();
             } else {
-                comment = $('#comment-'+$this.data('id'));
+                comment = $('#comment-' + $this.data('id'));
                 comment.remove();
             }
         });
@@ -431,14 +431,14 @@ $(window).load(function() {
         var $this = $(this);
         var last = $this.data('last') == undefined ? 0 : $this.data('last');
 
-        $.get($this.data('url')+'?last='+last)
+        $.get($this.data('url') + '?last=' + last)
             .done(function (data) {
-                var parent = $('.more-'+$this.data('parent'));
+                var parent = $('.more-' + $this.data('parent'));
                 $this.data("last", parseInt(data.last));
                 if (data.total > 0) {
                     parent.before(data.partial);
                 }
-                if ( ! data.hasMore) {
+                if (!data.hasMore) {
                     parent.remove();
                 }
             });
@@ -448,11 +448,11 @@ $(window).load(function() {
 
     if (comments.data('url')) {
         comments.infiniteScrollHelper({
-            loadMore: function(page, done) {
+            loadMore: function (page, done) {
                 page = page - 1;
-                var url = comments.data('url') + '?ajax=yes&page='+page;
+                var url = comments.data('url') + '?ajax=yes&page=' + page;
 
-                $.getJSON(url, function(data) {
+                $.getJSON(url, function (data) {
                     if (page >= data.last + 1 || data.total == 0) {
                         loading.remove();
                         return false;
@@ -467,15 +467,15 @@ $(window).load(function() {
     }
 
     $('.posts').infiniteScrollHelper({
-        loadMore: function(page, done) {
+        loadMore: function (page, done) {
             var posts = $('.posts'),
-                url = posts.data('url') + '/?ajax=yes&page='+page;
+                url = posts.data('url') + '/?ajax=yes&page=' + page;
 
             if (posts.hasClass('search')) {
-                url += '&q='+encodeURIComponent(posts.data('q'));
+                url += '&q=' + encodeURIComponent(posts.data('q'));
             }
 
-            $.getJSON(url, function(data) {
+            $.getJSON(url, function (data) {
                 if (data.total != 0) {
                     posts.append(data.partial);
                     FB.XFBML.parse();
@@ -493,10 +493,10 @@ $(window).load(function() {
     var notif = $('.notif');
 
     notif.infiniteScrollHelper({
-        loadMore: function(page, done) {
-            var url = notif.data('url') + '/?ajax=yes&page='+page;
+        loadMore: function (page, done) {
+            var url = notif.data('url') + '/?ajax=yes&page=' + page;
 
-            $.getJSON(url, function(data) {
+            $.getJSON(url, function (data) {
                 if (data.total != 0) {
                     notif.append(data.partial);
                 }

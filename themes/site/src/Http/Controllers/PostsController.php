@@ -3,17 +3,16 @@
 namespace Themes\Site\Http\Controllers;
 
 use Exception;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Smile\Http\Requests\CreateCommentRequest;
-use Smile\Http\Requests\CreateFileUploadRequest;
-use Smile\Http\Requests\CreateListRequest;
-use Smile\Http\Requests\CreateUrlUploadRequest;
 use Smile\Core\Persistence\Models\Post;
 use Smile\Core\Persistence\Repositories\CommentContract;
 use Smile\Core\Services\PostService;
 use Smile\Core\Services\ReportService;
+use Smile\Http\Requests\CreateCommentRequest;
+use Smile\Http\Requests\CreateFileUploadRequest;
+use Smile\Http\Requests\CreateListRequest;
+use Smile\Http\Requests\CreateUrlUploadRequest;
 
 class PostsController extends BaseSiteController
 {
@@ -36,17 +35,14 @@ class PostsController extends BaseSiteController
      * @param PostService $postService
      * @param CommentContract $comment
      * @param ReportService $report
-     * @param Guard $auth
      */
     public function __construct(PostService $postService,
                                 CommentContract $comment,
-                                ReportService $report,
-                                Guard $auth)
+                                ReportService $report)
     {
         $this->middleware('auth', ['except' => ['search', 'random', 'servePost']]);
 
         $this->postService = $postService;
-        $this->currentUser = $auth->user();
         $this->comment = $comment;
         $this->report = $report;
     }
@@ -65,10 +61,11 @@ class PostsController extends BaseSiteController
      * Store list
      *
      * @param CreateListRequest $request
-     * @return array
+     * @return array|JsonResponse
      */
     public function storeList(CreateListRequest $request)
     {
+        $user = $request->user();
         $data = $request->only('title', 'description', 'media', 'categories', 'items');
 
         if (count($request->get('items', [])) > setting('max-list-items', 10)) {
@@ -78,15 +75,15 @@ class PostsController extends BaseSiteController
         }
 
         try {
-            $this->postService->createList($this->currentUser, $data);
+            $this->postService->createList($user, $data);
         } catch (Exception $e) {
             return $this->jsonErrors([
-                'items.'.$e->getMessage() => 'Invalid format provided!',
+                'items.' . $e->getMessage() => 'Invalid format provided!',
             ]);
         }
 
         return [
-            'to' => route('profile.posts', $this->currentUser->name)
+            'to' => route('profile.posts', $user->name)
         ];
     }
 
@@ -94,7 +91,7 @@ class PostsController extends BaseSiteController
      * POst info
      *
      * @param Post $post
-     * @return Post
+     * @return array
      */
     public function info(Post $post)
     {
@@ -116,11 +113,11 @@ class PostsController extends BaseSiteController
     {
         $rules = [
             'title' => 'required',
-            'categories' => 'required|between:1,'.setting('maximum-categories', 2),
+            'categories' => 'required|between:1,' . setting('maximum-categories', 2),
         ];
 
         foreach ($request->get('categories', []) as $category) {
-            $rules['categories.'.$category] = 'required|exists:categories,slug';
+            $rules['categories.' . $category] = 'required|exists:categories,slug';
         }
 
         $this->validate($request, $rules);
@@ -159,7 +156,7 @@ class PostsController extends BaseSiteController
 
         $value = $request->get('value');
 
-        return $this->postService->vote($this->currentUser, $post, $value);
+        return $this->postService->vote($request->user(), $post, $value);
     }
 
     /**
@@ -168,19 +165,20 @@ class PostsController extends BaseSiteController
      * @param Post $post
      * @param CreateCommentRequest $request
      * @return \Smile\Core\Persistence\Models\Comment
+     * @throws \Throwable
      */
     public function comment(Post $post, CreateCommentRequest $request)
     {
         $interval = setting('comment-interval', 0);
 
-        if ($this->currentUser->last_comment + $interval > time()) {
+        if ($request->user()->last_comment + $interval > time()) {
             return $this->jsonErrors([
                 'comment' => __('You can add a new comment every :seconds seconds!', ['seconds' => $interval]),
             ]);
         }
 
         $all = $request->all();
-        $comment = $this->postService->comment($this->currentUser, $post, $all);
+        $comment = $this->postService->comment($request->user(), $post, $all);
 
         $viewData = ['comment' => $comment, 'post' => $post];
 
@@ -202,9 +200,10 @@ class PostsController extends BaseSiteController
     public function fileUpload(CreateFileUploadRequest $request)
     {
         $fields = $request->only('title', 'media', 'categories', 'description');
+        $user = $request->user();
 
         try {
-            $post = $this->postService->create($this->currentUser, $fields);
+            $post = $this->postService->create($user, $fields);
         } catch (Exception $e) {
             \Log::error($e);
             return $this->jsonErrors(['media' => __('Invalid media format!'), 'e' => $e->getMessage()]);
@@ -212,7 +211,7 @@ class PostsController extends BaseSiteController
 
         return [
             'post' => $post,
-            'to' => route('profile.posts', $this->currentUser->name)
+            'to' => route('profile.posts', $user->name)
         ];
     }
 
@@ -225,28 +224,30 @@ class PostsController extends BaseSiteController
     public function urlUpload(CreateUrlUploadRequest $request)
     {
         $fields = $request->only('title', 'link', 'categories', 'description');
+        $user = $request->user();
 
         try {
-            $post = $this->postService->create($this->currentUser, $fields);
+            $post = $this->postService->create($user, $fields);
         } catch (Exception $e) {
             return response()->json(['link' => __('Url format is invalid!'), 'e' => $e->getMessage()], 422);
         }
 
         return [
             'post' => $post,
-            'to' => route('profile.posts', $this->currentUser->name)
+            'to' => route('profile.posts', $user->name)
         ];
     }
 
     /**
      * Delete post
      *
+     * @param Request $request
      * @param Post $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete(Post $post)
+    public function delete(Request $request, Post $post)
     {
-        if ($this->currentUser->id == $post->user_id) {
+        if ($request->user()->id == $post->user_id) {
             $this->postService->deleteById($post->id);
         }
 
@@ -265,7 +266,7 @@ class PostsController extends BaseSiteController
             'reason' => 'required'
         ]);
 
-        $this->report->createPostReport($this->currentUser, $post, $request->get('reason'));
+        $this->report->createPostReport($request->user(), $post, $request->get('reason'));
     }
 
     /**
@@ -289,13 +290,14 @@ class PostsController extends BaseSiteController
     /**
      * Redirect to random post
      *
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function random()
+    public function random(Request $request)
     {
-        $post = $this->postService->random($this->currentUser);
+        $post = $this->postService->random($request->user());
 
-        if ( ! $post) {
+        if (!$post) {
             return redirect()->back();
         }
 

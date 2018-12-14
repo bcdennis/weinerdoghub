@@ -15,7 +15,7 @@ class Theme
     public function __construct($path, $name)
     {
         $this->name = $name;
-        $this->path = $path.'/'.$name;
+        $this->path = $path . '/' . $name;
     }
 
     /**
@@ -25,7 +25,7 @@ class Theme
      */
     public function getServiceProvider()
     {
-        return $this->getNamespace().'\ThemeServiceProvider';
+        return $this->getNamespace() . '\ThemeServiceProvider';
     }
 
     /**
@@ -35,7 +35,7 @@ class Theme
      */
     public function getNamespace()
     {
-        return 'Themes\\'.studly_case($this->name);
+        return 'Themes\\' . studly_case($this->name);
     }
 
     /**

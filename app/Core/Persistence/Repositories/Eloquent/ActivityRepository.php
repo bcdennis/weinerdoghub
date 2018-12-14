@@ -9,13 +9,13 @@ use Smile\Core\Persistence\Repositories\ActivityContract;
 
 class ActivityRepository extends BaseRepository implements ActivityContract
 {
-	/**
-	 * @param Activity $model
-	 */
-	public function __construct(Activity $model)
-	{
-		$this->model = $model;
-	}
+    /**
+     * @param Activity $model
+     */
+    public function __construct(Activity $model)
+    {
+        $this->model = $model;
+    }
 
     /**
      * Create a new activity
@@ -26,13 +26,13 @@ class ActivityRepository extends BaseRepository implements ActivityContract
      * @return Activity
      */
     public function create(User $user, Post $post, $eventName)
-	{
-		return $this->model->create([
-			'user_id' => $user->id,
+    {
+        return $this->model->create([
+            'user_id' => $user->id,
             'post_id' => $post->id,
             'eventName' => $eventName
-		]);
-	}
+        ]);
+    }
 
     /**
      * Find activities by user id
@@ -50,7 +50,7 @@ class ActivityRepository extends BaseRepository implements ActivityContract
             })
             ->where('user_id', $user->id);
 
-        if ( ! is_null($eventName)) {
+        if (!is_null($eventName)) {
             $eventName = $this->compileWildcard($eventName);
             $activities = $activities->where('eventName', 'like', $eventName);
         }
@@ -58,6 +58,17 @@ class ActivityRepository extends BaseRepository implements ActivityContract
         $activities = $activities->orderBy('id', 'desc');
 
         return $activities->paginate($perPage);
+    }
+
+    /**
+     * Compile wildcard strings
+     *
+     * @param $name
+     * @return mixed
+     */
+    protected function compileWildcard($name)
+    {
+        return str_replace('*', '%', $name);
     }
 
     /**
@@ -70,7 +81,7 @@ class ActivityRepository extends BaseRepository implements ActivityContract
     public function countActivities(User $user, $eventName)
     {
         $activity = $this->model->where('user_id', $user->id)
-                    ->where('eventName', $eventName);
+            ->where('eventName', $eventName);
 
         return $activity->count();
     }
@@ -88,17 +99,6 @@ class ActivityRepository extends BaseRepository implements ActivityContract
             ->where('eventName', 'like', $this->compileWildcard($eventName));
 
         return $activity->delete();
-    }
-
-    /**
-     * Compile wildcard strings
-     *
-     * @param $name
-     * @return mixed
-     */
-    protected function compileWildcard($name)
-    {
-        return str_replace('*', '%', $name);
     }
 
 }

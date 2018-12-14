@@ -53,7 +53,7 @@ class SettingsController extends BaseSettingController
             return $page;
         }
 
-        $file = 'uploads/assets/'.$type.'.'.$ext;
+        $file = 'uploads/assets/' . $type . '.' . $ext;
 
         if ($this->filesystem->put($file, file_get_contents($ad->getRealPath()))) {
             $this->settings->set($type, $file);

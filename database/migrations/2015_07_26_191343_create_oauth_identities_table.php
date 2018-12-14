@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOauthIdentitiesTable extends Migration {
+class CreateOauthIdentitiesTable extends Migration
+{
 
     /**
      * Run the migrations.
@@ -13,8 +14,7 @@ class CreateOauthIdentitiesTable extends Migration {
      */
     public function up()
     {
-        Schema::create('oauth_identities', function(Blueprint $table)
-        {
+        Schema::create('oauth_identities', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('user_id')->unsigned();

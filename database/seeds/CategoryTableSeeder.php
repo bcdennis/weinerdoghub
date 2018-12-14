@@ -33,13 +33,13 @@ class CategoryTableSeeder extends Seeder
     {
         $pos = 0;
 
-        foreach ($this->data as $category => $template)
-        {
+        foreach ($this->data as $category => $template) {
             $this->category->create([
-                'title'    => $category,
-                'slug'     => str_slug($category),
+                'title' => $category,
+                'slug' => str_slug($category),
+                'description' => '',
                 'template' => $template,
-                'active'   => true,
+                'active' => true,
                 'position' => $pos,
             ]);
             $pos++;

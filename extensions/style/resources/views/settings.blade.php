@@ -3,16 +3,21 @@
 @section('css')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/codemirror.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/hint/show-hint.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/hint/show-hint.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/theme/monokai.min.css"/>
 @stop
 
 @section('js')
     @parent
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/codemirror.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/mode/css/css.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/hint/show-hint.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/edit/matchbrackets.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/codemirror.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/mode/css/css.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/hint/show-hint.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.11.0/addon/edit/matchbrackets.min.js"></script>
     <script>
         var editor = CodeMirror.fromTextArea(document.getElementById("css"), {
             extraKeys: {"Ctrl-Space": "autocomplete"},
@@ -48,11 +53,13 @@
                     <div class="row m-b-lg">
                         <div class="col-md-12 border-right">
                             <h2>Your css code</h2>
-                            <form class="m-b-lg" role="form" method="post" action="{{ route('admin.extensions.style.settings') }}">
+                            <form class="m-b-lg" role="form" method="post"
+                                  action="{{ route('admin.extensions.style.settings') }}">
                                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                                 <div class="form-group">
                                     <label for="css">Remember to enter valid css</label>
-                                    <textarea name="css" id="css" rows="15" class="form-control">{{ setting('style.css', '') }}</textarea>
+                                    <textarea name="css" id="css" rows="15"
+                                              class="form-control">{{ setting('style.css', '') }}</textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-normal">Save</button>
